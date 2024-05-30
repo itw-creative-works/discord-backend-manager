@@ -1,0 +1,39 @@
+{
+  "name": "discord-backend-manager",
+  "version": "1.0.0",
+  "description": "Easily setup a general purpose discord bot to manage your server.",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "npm run prepare && ./node_modules/mocha/bin/mocha test/ --recursive --timeout=10000",
+    "prepare": "node -e 'require(`prepare-package`)()'"
+  },
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/itw-creative-works/discord-backend-manager.git"
+  },
+  "keywords": [
+    "management",
+    "backend",
+    "frontend",
+    "productivity"
+  ],
+  "author": "ITW Creative Works",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/itw-creative-works/discord-backend-manager/issues"
+  },
+  "homepage": "https://itwcreativeworks.com",
+  "dependencies": {
+    "@discordjs/voice": "0.14.0",
+    "backend-manager": "^3.2.158",
+    "discord.js": "14.15.2",
+    "node-schedule": "^2.1.0"
+  },
+  "devDependencies": {
+    "mocha": "^8.4.0",
+    "prepare-package": "^1.0.3"
+  }
+}
