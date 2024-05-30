@@ -175,7 +175,7 @@ DiscordManager.prototype.login = async function (file) {
       files.forEach((file) => {
         set(Manager, `discord.config.${file.name}`, file.content);
 
-        assistant.log('Registered config for', file.name, file.content);
+        // assistant.log('Registered config for', file.name, file.content);
       });
     })
 
