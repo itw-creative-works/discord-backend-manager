@@ -79,7 +79,7 @@ Helpers.prototype.getOfficialServerEmoji = async function (name) {
 
   return await client.guilds.fetch(config.main.server)
   .then(async (server) => {
-    return server.emojis.cache.find(e => e.name === name)
+    return server.emojis.cache.find(e => e.name === name) || name;
   })
 }
 

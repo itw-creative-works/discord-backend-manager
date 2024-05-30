@@ -58,11 +58,27 @@ module.exports = async function (instance, message) {
         return;
       }
 
+      // Get channels and emojis
+      const hangout = await helpers.getOfficialServerChannel('chat.hangout');
+      const support = await helpers.getOfficialServerChannel('chat.support');
+
       // Otherwise, send them a message to bring them to the server
       await message.reply({
-        content: await config.messages.general.comeToServer(member),
+        content: (``
+          + `Hi, **${member}**. I am unable to assist you over DM—please join our ${config.emojis.mascot} **${Manager.config.brand.name} Discord Server**! ${config.emojis.mascot} \n`
+          + `\n`
+          + `**Do you need help?**\n`
+          + `Post your question in our support channel: ${support} \n`
+          + `\n`
+          + `**Do you want to chat with our community?**\n`
+          + `Come hang out in our public discussion channel: ${hangout} \n`
+          + `\n`
+          + `We sincerely hope you enjoy your stay and get some kick-ass social media growth!\n`
+          + `\n`
+        )
       });
 
+      // Send to log
       helpers.sendToLogChannel(`${member} (${message.author.username}) DM'd me: \n${message.content}`)
     }
   }
