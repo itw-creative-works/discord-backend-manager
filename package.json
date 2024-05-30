@@ -1,6 +1,6 @@
 {
   "name": "discord-backend-manager",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Easily setup a general purpose discord bot to manage your server.",
   "main": "dist/index.js",
   "scripts": {
