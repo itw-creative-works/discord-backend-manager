@@ -12,12 +12,14 @@ module.exports = function (instance) {
       // Economy
       currency: {
         types: ['string'],
-        default: '<:somiibucks:789981968732389416>',
+        // default: '<:somiibucks:789981968732389416>',
+        default: '<:currency:1245646241073860678>',
         required: false,
       },
       xp: {
         types: ['string'],
-        default: '<:xp:789981968342974475>',
+        // default: '<:xp:789981968342974475>',
+        default: '<a:xp:1245646239698128939>',
         required: false,
       },
 

@@ -17,6 +17,13 @@ module.exports = {
     const assistant = instance.assistant;
 
     // Set shortcuts
+		const interaction = event.interaction;
+		const subcommand = event.subcommand;
+		const options = event.options;
+
+		// assistant.log('Command', subcommand, options);
+
+    // Respond
 		return helpers.sendError(interaction, 'There was an error while executing this command!', {embed: true});
 	},
 };
