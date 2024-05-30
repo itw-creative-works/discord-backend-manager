@@ -73,7 +73,7 @@ module.exports = async function (instance, message) {
           + `**Do you want to chat with our community?**\n`
           + `Come hang out in our public discussion channel: ${hangout} \n`
           + `\n`
-          + `We sincerely hope you enjoy your stay and get some kick-ass social media growth!\n`
+          + `We sincerely hope you enjoy your stay in our community!\n`
           + `\n`
         )
       });
