@@ -42,11 +42,17 @@ DiscordManager.prototype.init = function (file) {
   Manager.DiscordManager = self;
 
   // Load all server configs
-  glob('servers/*/', { cwd: cwd})
+  glob('servers/*/', {cwd: cwd})
   .forEach((file) => {
+    // Split last part usingsystem path separator
+    const name = file.split(path.sep).slice(-1)[0];
+
+    // Save login time
+    Manager.storage().set(`servers.${name}.startTime`, new Date().toISOString()).write();
+
+    // Login
     self.login(file);
   });
-
 
   // Handle online event
   try {
@@ -169,7 +175,7 @@ DiscordManager.prototype.login = async function (file) {
       files.forEach((file) => {
         set(Manager, `discord.config.${file.name}`, file.content);
 
-        // assistant.log('Registered config for', file.name);
+        assistant.log('Registered config for', file.name, file.content);
       });
     })
 
@@ -371,10 +377,19 @@ function iterate(pattern, customDir, options) {
         const index = result.findIndex((item) => item.name === fileName);
         if (index !== -1) {
           const existing = result[index];
+          const content = item.content(options.instance)
 
           // Run schema defaults
           if (options.schemafy) {
-            item.content = powertools.defaults(item.content(options.instance), existing.schema);
+            item.content = powertools.defaults(content, existing.schema);
+
+            // Add other items back into it
+            powertools.getKeys(content).forEach((key) => {
+              const value = get(item.content, key);
+              if (value === undefined) {
+                set(item.content, key, get(content, key));
+              }
+            });
           }
 
           // Replace item

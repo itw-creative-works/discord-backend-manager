@@ -28,6 +28,7 @@ Helpers.prototype.getOfficialServer = async function () {
   const self = this;
   const Manager = self.Manager;
   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+  const assistant = self.instance.assistant;
 
   return await client.guilds.fetch(config.main.server);
 }
@@ -36,6 +37,7 @@ Helpers.prototype.getOfficialServerChannel = async function (path) {
   const self = this;
   const Manager = self.Manager;
   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+  const assistant = self.instance.assistant;
 
   return await client.guilds.fetch(config.main.server)
   .then(async (server) => {
@@ -48,6 +50,7 @@ Helpers.prototype.getOfficialServerRoleMembers = async function (role) {
   const self = this;
   const Manager = self.Manager;
   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+  const assistant = self.instance.assistant;
 
   return await client.guilds.fetch(config.main.server)
   .then(async (server) => {
@@ -60,6 +63,7 @@ Helpers.prototype.getOfficialServerMember = async function (id) {
   const self = this;
   const Manager = self.Manager;
   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+  const assistant = self.instance.assistant;
 
   return await client.guilds.fetch(config.main.server)
   .then(async (server) => {
@@ -71,6 +75,7 @@ Helpers.prototype.getOfficialServerEmoji = async function (name) {
   const self = this;
   const Manager = self.Manager;
   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+  const assistant = self.instance.assistant;
 
   return await client.guilds.fetch(config.main.server)
   .then(async (server) => {
@@ -82,6 +87,7 @@ Helpers.prototype.displayMember = function (member, tag) {
   const self = this;
   const Manager = self.Manager;
   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+  const assistant = self.instance.assistant;
 
   if (member instanceof GuildMember) {
     const username = `${member.user.username}`
@@ -99,6 +105,7 @@ Helpers.prototype.displayCommand = function (name) {
   const self = this;
   const Manager = self.Manager;
   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+  const assistant = self.instance.assistant;
 
   const command = Manager.discord.publishedCommands.find(c => c.name === name);
 
@@ -109,6 +116,7 @@ Helpers.prototype.getPrettyRole = function (id) {
   const self = this;
   const Manager = self.Manager;
   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+  const assistant = self.instance.assistant;
 
   // Fix beta
   if (id === 'beta') {
@@ -123,6 +131,7 @@ Helpers.prototype.getMemberInvite = async function (member) {
   const self = this;
   const Manager = self.Manager;
   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+  const assistant = self.instance.assistant;
 
   try {
 
@@ -168,6 +177,7 @@ Helpers.prototype.isSnowFlake = function (id) {
   const self = this;
   const Manager = self.Manager;
   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+  const assistant = self.instance.assistant;
 
   try {
     return SnowflakeUtil.deconstruct(id)
@@ -180,6 +190,7 @@ Helpers.prototype.getFirebaseAccount = function (id) {
   const self = this;
   const Manager = self.Manager;
   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+  const assistant = self.instance.assistant;
 
   return new Promise(function(resolve, reject) {
     let query = Manager.libraries.initializedAdmin.firestore().collection('users')
@@ -201,7 +212,7 @@ Helpers.prototype.getFirebaseAccount = function (id) {
         account = doc.data();
       });
 
-      return resolve(Manager.assistant.resolveAccount(account));
+      return resolve(assistant.resolveAccount(account));
     })
   });
 }
@@ -210,6 +221,7 @@ Helpers.prototype.privatize = function (email) {
   const self = this;
   const Manager = self.Manager;
   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+  const assistant = self.instance.assistant;
 
   let result = '';
   for (var i = 0, l = email.length; i < l; i++) {
@@ -223,6 +235,7 @@ Helpers.prototype.isPrivelagedMember = function (member) {
   const self = this;
   const Manager = self.Manager;
   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+  const assistant = self.instance.assistant;
 
   if (!member) {
     return false
@@ -242,6 +255,7 @@ Helpers.prototype.isPrivelagedMember = function (member) {
 // const self = this;
 //   const Manager = self.Manager;
 //   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+//   const assistant = self.instance.assistant;
 
 //   const managerRegex = Manager.Roles().list().find(r => r.id === id);
 //   const discordId = Object.keys(config.roles).find(key => key.match(managerRegex))
@@ -253,6 +267,7 @@ Helpers.prototype.getManagerRole = function (id) {
   const self = this;
   const Manager = self.Manager;
   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+  const assistant = self.instance.assistant;
 
   const discordRoleId = Object.keys(config.roles).find(key => config.roles[key] === id) || '';
   const managerRole = Manager.Roles().list().find(r => discordRoleId.match(r.regex));
@@ -264,6 +279,7 @@ Helpers.prototype.getManagerRole = function (id) {
 // const self = this;
 //   const Manager = self.Manager;
 //   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+//   const assistant = self.instance.assistant;
 
 //   const managerRole = self.getManagerRole(role);
 
@@ -350,6 +366,7 @@ Helpers.prototype.betaTesterStatus = function (member, account) {
   const self = this;
   const Manager = self.Manager;
   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+  const assistant = self.instance.assistant;
 
   const roles = {
     active: member.roles.cache.has(config.roles.active),
@@ -376,6 +393,7 @@ Helpers.prototype.betaTesterAccept = async function (member, uid) {
   const self = this;
   const Manager = self.Manager;
   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+  const assistant = self.instance.assistant;
 
   // Manager.libraries.initializedAdmin.firestore().doc(`users/${uid}`)
   // .set({
@@ -414,6 +432,7 @@ Helpers.prototype.formatNumber = function (num) {
   const self = this;
   const Manager = self.Manager;
   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+  const assistant = self.instance.assistant;
 
   return parseFloat(num).toLocaleString('en-US');
 }
@@ -422,6 +441,7 @@ Helpers.prototype.sendError = function (interface, content, options) {
   const self = this;
   const Manager = self.Manager;
   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+  const assistant = self.instance.assistant;
 
   options = options || {};
   options.embed = typeof options.embed === 'undefined' ? false : options.embed;
@@ -456,6 +476,7 @@ Helpers.prototype.sendNormal = function (interface, content, options) {
   const self = this;
   const Manager = self.Manager;
   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+  const assistant = self.instance.assistant;
 
   options = options || {};
   options.embed = typeof options.embed === 'undefined' ? false : options.embed;
@@ -507,6 +528,7 @@ Helpers.prototype.sendToOfficialServerChannel = function (channel, message) {
   const self = this;
   const Manager = self.Manager;
   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+  const assistant = self.instance.assistant;
 
   self.getOfficialServerChannel(channel)
   .then(channel => {
@@ -518,6 +540,7 @@ Helpers.prototype.sendToLogChannel = function (msg) {
   const self = this;
   const Manager = self.Manager;
   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+  const assistant = self.instance.assistant;
 
   const isError = msg instanceof Error;
 
@@ -544,6 +567,7 @@ Helpers.prototype.restart = function () {
   const self = this;
   const Manager = self.Manager;
   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+  const assistant = self.instance.assistant;
 
   // Remove node_modules
   jetpack.remove('node_modules');
@@ -567,6 +591,7 @@ Helpers.prototype.joinVoiceChannel = function (channelId) {
   const self = this;
   const Manager = self.Manager;
   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+  const assistant = self.instance.assistant;
 
   return new Promise(async function(resolve, reject) {
     const officialServer = await self.getOfficialServer()
@@ -600,6 +625,7 @@ Helpers.prototype.playSongInVoiceChannel = function (query, member) {
   const self = this;
   const Manager = self.Manager;
   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+  const assistant = self.instance.assistant;
 
   return new Promise(async function(resolve, reject) {
 		const powertools = Manager.require('node-powertools');
@@ -673,6 +699,7 @@ Helpers.prototype.command = function (name) {
   const self = this;
   const Manager = self.Manager;
   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+  const assistant = self.instance.assistant;
 
   return process.env.ENVIRONMENT !== 'development'
     ? name
@@ -683,6 +710,7 @@ Helpers.prototype.format = function (s) {
   const self = this;
   const Manager = self.Manager;
   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+  const assistant = self.instance.assistant;
 
   return s.replace(/\n/igm, '').trim().replace(/\$N/igm, '\n').replace(/\$S/igm, '  ')
 }
@@ -691,6 +719,7 @@ Helpers.prototype.resolveActiveGiveaway = function () {
   const self = this;
   const Manager = self.Manager;
   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+  const assistant = self.instance.assistant;
 
   return new Promise(async function(resolve, reject) {
     // Pull from storage
@@ -748,6 +777,7 @@ Helpers.prototype.updateActiveGiveaway = function () {
   const self = this;
   const Manager = self.Manager;
   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+  const assistant = self.instance.assistant;
 
   return new Promise(async function(resolve, reject) {
 		const activeGiveaway = await self.resolveActiveGiveaway();

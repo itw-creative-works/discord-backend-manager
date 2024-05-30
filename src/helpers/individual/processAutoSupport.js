@@ -118,7 +118,7 @@ module.exports = function (instance, member, message, messages) {
 
       // Add support instructions to the first message since server restart
       // if (messagesFromThisChannel === 1) {
-      if (messagesFromThisChannel <= 3) {
+      if (messagesFromThisChannel <= 3 && config.settings.chatsy.supportInstructions) {
         lastMessage.content += ``
           + `\n\n`
           + `**Here's more things to try**\n`

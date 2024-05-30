@@ -38,6 +38,11 @@ module.exports = function (instance) {
           default: '',
           required: true,
         },
+        includeSupportInstructions: {
+          types: ['boolean'],
+          default: true,
+          required: false,
+        },
       },
 
       // Stats

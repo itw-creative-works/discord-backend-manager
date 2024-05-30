@@ -26,7 +26,7 @@ Profile.prototype.get = function (id) {
   const self = this;
   const Manager = self.Manager;
   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
-  const assistant = instance.assistant;
+  const assistant = self.instance.assistant;
 
   return new Promise(function(resolve, reject) {
     Manager.libraries.initializedAdmin.firestore().doc(`discord/${id}`)
@@ -70,6 +70,7 @@ Profile.prototype.set = function (id, data) {
   const self = this;
   const Manager = self.Manager;
   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+  const assistant = self.instance.assistant;
 
   const now = new Date();
   const newData = _.merge({}, data, {
@@ -95,6 +96,7 @@ Profile.prototype.reward = async function (member, type, channel) {
   const self = this;
   const Manager = self.Manager;
   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+  const assistant = self.instance.assistant;
 
   const reward = config.rewards[type];
   if (reward.enabled === false) {
