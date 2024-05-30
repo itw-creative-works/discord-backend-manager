@@ -10,10 +10,7 @@ module.exports = async function (instance, interaction) {
   const moment = Manager.require('moment');
 
   // Set variables
-  // const loading = new EmbedBuilder()
-  //   .setColor(config.colors.blue)
-  //   .setDescription(`**One moment...** ${config.emojis.cheers}`)
-  const loading = `**One moment...** ${config.emojis.cheers}`
+  const loading = `**One moment...** ${config.emojis.loading}`
 
   const isChatInputCommand = interaction.isChatInputCommand();
   const isUserContextMenuCommand = interaction.isUserContextMenuCommand();
