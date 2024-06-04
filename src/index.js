@@ -51,7 +51,7 @@ DiscordManager.prototype.init = function (file) {
     Manager.storage().set(`servers.${name}.startTime`, new Date().toISOString()).write();
 
     // Login
-    self.login(file);
+    self.login(file, 3);
   });
 
   // Handle online event
@@ -91,7 +91,7 @@ DiscordManager.prototype.registerUniversalEntities = function (server, app) {
 }
 
 
-DiscordManager.prototype.login = async function (file) {
+DiscordManager.prototype.login = async function (file, attempts) {
   const self = this;
 
   const projectPath = path.resolve(cwd, file);
@@ -110,6 +110,7 @@ DiscordManager.prototype.login = async function (file) {
   // Create variables
   const assistant = Manager.Assistant({}, {functionName: name});
   let DISCORD_TOKEN = null;
+  const maxAttempts = attempts || 3;
 
   // Setup prefix
   // assistant.setLogPrefix(`${name}`);
@@ -307,11 +308,11 @@ DiscordManager.prototype.login = async function (file) {
   // })
 
   client.on('warn', function (event) {
-    assistant.warn(event);
+    assistant.warn('[Discord warn]', event);
   })
 
   client.on('error', function (event) {
-    assistant.error(event);
+    assistant.error('[Discord error]', event);
   })
 
   // Fetch app Object
@@ -327,9 +328,36 @@ DiscordManager.prototype.login = async function (file) {
     app: app,
   };
 
-  // Login
-  assistant.log('Logging in...');
-  client.login(DISCORD_TOKEN);
+  // Login using attempts
+  const login = () => {
+    return new Promise((resolve, reject) => {
+      const attemptLogin = async () => {
+        const attempt = `(${maxAttempts - attempts + 1}/${maxAttempts})`;
+
+        // Log
+        assistant.log(`Attempting login ${attempt}...`);
+
+        try {
+          await client.login(DISCORD_TOKEN);
+          assistant.log(`Login successful ${attempt}!`);
+          resolve();
+        } catch (e) {
+          if (attempts > 0) {
+            attempts--;
+            assistant.warn(`Login failed ${attempt}, retrying in 5 seconds...`, e);
+            setTimeout(attemptLogin, 5000);
+          } else {
+            assistant.error(`Login failed after all attempts ${attempt}`, e);
+            reject(e);
+          }
+        }
+      }
+      attemptLogin();
+    });
+  }
+
+  // Start login
+  await login().catch(e => e);
 
   // Return self
   return self;
