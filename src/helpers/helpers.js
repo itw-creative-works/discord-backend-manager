@@ -124,7 +124,7 @@ Helpers.prototype.getPrettyRole = function (id) {
   }
 
   // Return
-  return `${config.emojis[id]} **${roleMention(config.roles[id])}**`
+  return `${config.emojis[id]} ${roleMention(config.roles[id])}`
 }
 
 Helpers.prototype.getMemberInvite = async function (member) {
