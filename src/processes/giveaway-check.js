@@ -84,13 +84,13 @@ module.exports = {
             if (ineligibleAnnouncements >= MAX_INELIGIBILE_ANNOUNCEMENTS) {
               continue
             }
-            await helpers.sendNormal(giveaway, `:x: **${helpers.displayMember(member)}** was chosen as the winner but is ineligible because they do not have the ${roleMention(roleRequired)} role. Let's pick a new winner...`, {embed: true})
+            await helpers.sendNormal(giveaway, `:x: **${helpers.displayMember(member)}** was chosen as the winner but is ineligible because they do not have the ${helpers.getPrettyRole(roleRequired)} role. Let's pick a new winner...`, {embed: true})
             // await giveaway.send({
             //   embeds: [
             //     new EmbedBuilder()
             //       // .setTitle(`Ineligible winner`)
             //       .setColor(config.colors.red)
-            //       .setDescription(`:x: **${helpers.displayMember(member)}** was chosen as the winner but is ineligible because they do not have the ${roleMention(roleRequired)} role. Let's pick a new winner...`)
+            //       .setDescription(`:x: **${helpers.displayMember(member)}** was chosen as the winner but is ineligible because they do not have the ${helpers.getPrettyRole(roleRequired)} role. Let's pick a new winner...`)
             //   ]
             // })
             // .catch(e => assistant.error)

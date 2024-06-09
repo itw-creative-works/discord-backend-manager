@@ -71,6 +71,46 @@ module.exports = function (instance) {
         default: '<:active:1063569222116069456>',
         required: false,
       },
+      member: {
+        types: ['string'],
+        default: '<:member:1020012165987565579>',
+        required: false,
+      },
+      bot: {
+        types: ['string'],
+        default: '<:bot:1020012163345154089>',
+        required: false,
+      },
+      og: {
+        types: ['string'],
+        default: '<:og:1020012164653785131>',
+        required: false,
+      },
+      vip: {
+        types: ['string'],
+        default: '<:vip:1020012161159925790>',
+        required: false,
+      },
+      admin: {
+        types: ['string'],
+        default: '<:admin:1020012160014893186>',
+        required: false,
+      },
+      booster: {
+        types: ['string'],
+        default: '<:booster:1020012158458798272>',
+        required: false,
+      },
+      moderator: {
+        types: ['string'],
+        default: '<:moderator:1020012168298639360>',
+        required: false,
+      },
+      staff: {
+        types: ['string'],
+        default: '<:staff:1022703578630070303>',
+        required: false,
+      },
     },
   };
 }

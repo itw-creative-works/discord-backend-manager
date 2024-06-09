@@ -24,7 +24,7 @@ module.exports = {
         .setTitle(`Your ${Manager.config.brand.name} account is already linked`)
         .setDescription(
           `${config.emojis.mascot} Hey, **${helpers.displayMember(interaction.member)}**, you have already linked your ${Manager.config.brand.name} account with Discord.\n\n`
-          + `Type the ${helpers.displayCommand('acount')} command for details.\n`
+          + `Type the ${helpers.displayCommand('account')} command for details.\n`
         );
       return interaction.editReply({
         content: '',

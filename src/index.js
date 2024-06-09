@@ -1,4 +1,7 @@
 const { Client, GatewayIntentBits, Partials, Routes, Collection, ActivityType, channelMention, REST } = require('discord.js');
+const { joinVoiceChannel } = require('@discordjs/voice');
+const { DiscordTogether } = require('discord-together');
+
 // Setup main manager
 const cwd = process.cwd();
 const Manager = (new (require('backend-manager'))).init(exports, {
@@ -141,6 +144,9 @@ DiscordManager.prototype.login = async function (file, attempts) {
     ],
   });
   const rest = new REST({ version: '10' }).setToken(DISCORD_TOKEN);
+
+  // Set up Discord Together
+  client.discordTogether = new DiscordTogether(client);
 
   // On ready
   client.once('ready', async () => {
@@ -299,6 +305,9 @@ DiscordManager.prototype.login = async function (file, attempts) {
     //   // shardId: 0,
     // });
 
+    // Make bot join voice channel XXX and start the YouTube Activity
+    self.autoActivityStarter(Manager);
+
     // Log
     assistant.log(`🤖 Logged in as ${client.user.tag}!`);
   });
@@ -440,6 +449,46 @@ function iterate(pattern, customDir, options) {
 
     // Return the result
     return resolve(result);
+  });
+}
+
+// Auto activity starter
+DiscordManager.prototype.autoActivityStarter = function (Manager) {
+  const self = this;
+  const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+  const assistant = Manager.assistant;
+
+  return new Promise(function(resolve, reject) {
+    const voiceChannelId = Manager.discord.config.channels?.voice?.streaming;
+
+    if (!voiceChannelId) {
+      return resolve();
+    }
+
+    helpers.joinVoiceChannel(voiceChannelId)
+    .then((connection) => {
+      client.discordTogether.createTogetherCode(voiceChannelId, 'youtube')
+      .then(async (invite) => {
+        // Get channel
+        const channel = await client.channels.fetch(Manager.discord.config.channels?.chat?.hangout);
+        // const channel = await client.channels.fetch(Manager.discord.config.channels?.admins?.commands);
+
+        // Send invite
+        const message = await channel.send(`${invite.code}`);
+
+        // Get last message ID and delete it
+        const existingMessageId = Manager.storage().get(`autoActivityStarter.lastMessageId`).value();
+        if (existingMessageId) {
+          await channel.messages.delete(existingMessageId);
+        }
+
+        // Store message ID to delete later
+        Manager.storage().set(`autoActivityStarter.lastMessageId`, message.id).write();
+
+        // Log
+        assistant.log('🎵 Sent YouTube Together invite to chat channel');
+      });
+    })
   });
 }
 

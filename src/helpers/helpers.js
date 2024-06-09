@@ -107,9 +107,16 @@ Helpers.prototype.displayCommand = function (name) {
   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
   const assistant = self.instance.assistant;
 
+  // Get command
   const command = Manager.discord.publishedCommands.find(c => c.name === name);
 
-  return `</${command.name}:${command.id}>`
+  if (command) {
+    return `</${command.name}:${command.id}>`
+  } else {
+    assistant.warn(`Command not found: ${name}`);
+    return `\`/${name}\``
+  }
+
 }
 
 Helpers.prototype.getPrettyRole = function (id) {
@@ -122,9 +129,15 @@ Helpers.prototype.getPrettyRole = function (id) {
   if (id === 'beta') {
     id = 'betaTester';
   }
+  // Check if its a snowflake
+  const isSnowFlake = self.isSnowFlake(id);
 
   // Return
-  return `${config.emojis[id]} ${roleMention(config.roles[id])}`
+  if (isSnowFlake) {
+    return roleMention(id);
+  } else {
+    return `${config.emojis[id]} ${roleMention(config.roles[id])}`
+  }
 }
 
 Helpers.prototype.getMemberInvite = async function (member) {
@@ -134,7 +147,6 @@ Helpers.prototype.getMemberInvite = async function (member) {
   const assistant = self.instance.assistant;
 
   try {
-
     // To compare, we need to load the current invite list.
     const newInvites = await member.guild.invites.fetch();
     // This is the *existing* invites for the guild.
@@ -587,6 +599,40 @@ Helpers.prototype.restart = function () {
   }, 3000);
 };
 
+// Helpers.prototype.joinVoiceChannel = function (channelId) {
+//   const self = this;
+//   const Manager = self.Manager;
+//   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+//   const assistant = self.instance.assistant;
+
+//   return new Promise(async function(resolve, reject) {
+//     const officialServer = await self.getOfficialServer();
+
+//     const channel = channelId || Manager.storage().get(
+//       'lastActiveVoiceChannel',
+//       Manager.discord.config[Manager.discord.config.channels.defaults.voice]
+//     ).value();
+
+//     if (channel) {
+//       console.log(`Joining last active voice channel: ${channel}`);
+//       joinVoiceChannel({
+//         guildId: officialServer.id,
+//         channelId: channel,
+//         adapterCreator: officialServer.voiceAdapterCreator,
+//       });
+
+//       Manager.storage().set(
+//         'lastActiveVoiceChannel',
+//         channel,
+//       ).write();
+//     }
+
+//     return resolve(
+//       officialServer.channels.cache.get(channel)
+//     );
+//   })
+// }
+
 Helpers.prototype.joinVoiceChannel = function (channelId) {
   const self = this;
   const Manager = self.Manager;
@@ -594,30 +640,25 @@ Helpers.prototype.joinVoiceChannel = function (channelId) {
   const assistant = self.instance.assistant;
 
   return new Promise(async function(resolve, reject) {
-    const officialServer = await self.getOfficialServer()
+    const officialServer = await self.getOfficialServer();
 
-    const channel = channelId || Manager.storage().get(
-      'lastActiveVoiceChannel',
-      Manager.discord.config[Manager.discord.config.channels.defaults.voice]
-    ).value();
+    channelId = channelId || get(Manager.discord.config.channels, Manager.discord.config.channels.defaults.voice);
 
-    if (channel) {
-      console.log(`Joining last active voice channel: ${channel}`);
-      joinVoiceChannel({
-        guildId: officialServer.id,
-        channelId: channel,
-        adapterCreator: officialServer.voiceAdapterCreator,
-      });
-
-      Manager.storage().set(
-        'lastActiveVoiceChannel',
-        channel,
-      ).write();
+    // Check if channel exists
+    if (!channelId) {
+      return reject('No channel found');
     }
 
-    return resolve(
-      officialServer.channels.cache.get(channel)
-    );
+    // Create a connection to the voice channel
+    const connection = joinVoiceChannel({
+      channelId: channelId,
+      guildId: officialServer.id,
+      adapterCreator: officialServer.voiceAdapterCreator,
+    });
+
+    return resolve({
+      connection: connection,
+    });
   })
 }
 
@@ -809,8 +850,8 @@ Helpers.prototype.updateActiveGiveaway = function () {
       + `\n`
       + `:heart_decoration: ${
         activeGiveaway.rolesRequired[0]
-          ? `This giveaway is **exclusively** for all our ${roleMention(activeGiveaway.rolesRequired[0])} members!`
-          : `This giveaway is to show our appreciation for all our ${roleMention(config.roles.member)}s!`
+          ? `This giveaway is **exclusively** for all our ${helpers.getPrettyRole(activeGiveaway.rolesRequired[0])} members!`
+          : `This giveaway is to show our appreciation for all our ${helpers.getPrettyRole('member')}s!`
       }\n`
       + `\n`
       + `**Sponsored by ${self.displayMember(sponsor, true)}!**\n`

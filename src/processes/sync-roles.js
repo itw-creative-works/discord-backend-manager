@@ -127,7 +127,7 @@ module.exports = {
           const lastActiveDate = moment(_.get(discordProfile, 'activity.lastActivity.timestamp', 0));
           const lastActiveDays = moment().diff(lastActiveDate, 'days', true);
           const hasActiveRole = member.roles.cache.get(config.roles.active);
-          const activeMessage = `**${helpers.displayMember(member, true)}** just had the **${roleMention(config.roles.active)}** role {status}! \n**Last Active:** ${lastActiveDate} (${lastActiveDays.toFixed(2)} days ago) \n**Total Chats:** ${totalMessages} \n**Weekly Chats:** ${thisWeekMessages} \n**Monthly Chats:** ${thisMonthMessages}`;
+          const activeMessage = `**${helpers.displayMember(member, true)}** just had the **${helpers.getPrettyRole('active')}** role {status}! \n**Last Active:** ${lastActiveDate} (${lastActiveDays.toFixed(2)} days ago) \n**Total Chats:** ${totalMessages} \n**Weekly Chats:** ${thisWeekMessages} \n**Monthly Chats:** ${thisMonthMessages}`;
 
           if (
             // If they haven't been here for a week and their messages are lacking, remove active
@@ -152,7 +152,7 @@ module.exports = {
               _addRole(member, config.roles.active);
 
               const dest = await helpers.getOfficialServerChannel('chat.hangout')
-              await helpers.sendNormal(dest, `**${helpers.displayMember(member, true)}** has been granted the **${config.emojis.active} ${roleMention(config.roles.active)}** role for being a superstar!`, {embed: true})
+              await helpers.sendNormal(dest, `**${helpers.displayMember(member, true)}** has been granted the **${config.emojis.active} ${helpers.getPrettyRole('active')}** role for being a superstar!`, {embed: true})
 
               // helpers.getOfficialServerChannel(process.env.ENVIRONMENT === 'development' ? 'admins.testLog' : 'chat.hangout')
               // .then(channel => {
@@ -161,7 +161,7 @@ module.exports = {
               //       new EmbedBuilder()
               //         .setTitle(`Role unlocked!`)
               //         .setColor(config.colors.blue)
-              //         .setDescription(`**${helpers.displayMember(member, true)}** has been granted the **${roleMention(config.roles.active)}** role for being a superstar!`)
+              //         .setDescription(`**${helpers.displayMember(member, true)}** has been granted the **${helpers.getPrettyRole('active')}** role for being a superstar!`)
               //     ]
               //   })
               // })

@@ -70,7 +70,7 @@ module.exports = {
         )
         .catch(e => e);
 
-				helpers.sendToLogChannel(`**${helpers.displayMember(discordMember, true)}** is no longer a ${roleMention(config.roles.betaTester)} due to prolonged inactivity.`);
+				helpers.sendToLogChannel(`**${helpers.displayMember(discordMember, true)}** is no longer a ${helpers.getPrettyRole('beta')} due to prolonged inactivity.`);
 
         return resolve();
       });

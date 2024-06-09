@@ -37,7 +37,7 @@ module.exports = function (instance, member, message, messages) {
             new EmbedBuilder()
               .setColor(config.colors.blue)
               .setDescription(``
-                + `Hey, **${helpers.displayMember(member, true)}** Tagging ${userMention(client.user.id)} is **the fastest way to get an answer**. Otherwise, please wait for a ${roleMention(config.roles.staff)} member to get to your question.\n`
+                + `Hey, **${helpers.displayMember(member, true)}** Tagging ${userMention(client.user.id)} is **the fastest way to get an answer**. Otherwise, please wait for a ${helpers.getPrettyRole('staff')} member to get to your question.\n`
                 + ``
               )
           ]
@@ -89,6 +89,8 @@ module.exports = function (instance, member, message, messages) {
     const discordProfile = await profile.get(member.id);
     const firebaseAccount = await helpers.getFirebaseAccount(member.id);
     const conversationId = discordProfile?.chatsy?.conversationId || null;
+    // Add some context that this is from Discord so the bot doesnt tell the user to go to Discord
+    const finalMessageContent = `{context=discord application} ${messageContent}`
 
     // If user doesn't have a chatID, ignore
     fetch('https://api.chatsy.ai/converse', {
@@ -98,7 +100,7 @@ module.exports = function (instance, member, message, messages) {
         accountId: config.settings.chatsy.accountId,
         chatId: config.settings.chatsy.chatId,
         conversationId: conversationId,
-        message: messageContent,
+        message: finalMessageContent,
         // sessionData: getSessionData(),
         userData: {
           discord: true,
