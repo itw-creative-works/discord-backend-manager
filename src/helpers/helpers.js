@@ -136,7 +136,7 @@ Helpers.prototype.getPrettyRole = function (id) {
   if (isSnowFlake) {
     return roleMention(id);
   } else {
-    return `${config.emojis[id]} ${roleMention(config.roles[id])}`
+    return `${config.emojis[id]}${roleMention(config.roles[id])}`
   }
 }
 
@@ -434,7 +434,7 @@ Helpers.prototype.betaTesterAccept = async function (member, uid) {
           + `\n`
           + `${config.emojis.premium} Remember, you need to be active in our Discord server and have **${Manager.config.brand.name} Premium** to be able to use the ${Manager.config.brand.name} ${helpers.getPrettyRole('beta')} modules.\n`
           + `\n`
-          + `:fire: [Purchase ${Manager.config.brand.name} Premium](${instance.app.url}/pricing)\n`
+          + `:fire: [Purchase ${Manager.config.brand.name} Premium](${self.instance.app.url}/pricing)\n`
         )
     ]
   })
