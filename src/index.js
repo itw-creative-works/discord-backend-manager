@@ -273,9 +273,6 @@ DiscordManager.prototype.login = async function (file, attempts) {
     // Get official server
     const officialServer = await helpers.getOfficialServer();
 
-    const member = await helpers.getOfficialServerMember('549076304830660619');
-    helpers.betaTesterAccept(member);
-
     // Publish commands
     await rest.put(Routes.applicationCommands(client.user.id), { body: commandsJSON })
       .then((r) => {
