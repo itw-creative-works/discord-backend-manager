@@ -119,7 +119,7 @@ Helpers.prototype.displayCommand = function (name) {
 
 }
 
-Helpers.prototype.getPrettyRole = function (id) {
+Helpers.prototype.getPrettyRole = function (id, overwrite) {
   const self = this;
   const Manager = self.Manager;
   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
@@ -136,7 +136,9 @@ Helpers.prototype.getPrettyRole = function (id) {
   if (isSnowFlake) {
     return roleMention(id);
   } else {
-    return `${config.emojis[id]}${roleMention(config.roles[id])}`
+    const roleText = overwrite ? `**${overwrite}**` : roleMention(config.roles[id]);
+
+    return `${config.emojis[id]}${roleText}`;
   }
 }
 
@@ -430,9 +432,9 @@ Helpers.prototype.betaTesterAccept = async function (member, uid) {
         .setColor(config.colors.purple)
         .setTitle(`${Manager.config.brand.name} Beta Tester Acceptance`)
         .setDescription(``
-          + `${config.emojis.betaTester} Congrats, ${member}! You have been accepted into the **${Manager.config.brand.name} ${helpers.getPrettyRole('beta')} Program**!\n`
+          + `${config.emojis.betaTester} Congrats, ${member}! You have been accepted into the **${Manager.config.brand.name}** ${helpers.getPrettyRole('beta', 'Beta Tester')} Program!\n`
           + `\n`
-          + `${config.emojis.premium} Remember, you need to be active in our Discord server and have **${Manager.config.brand.name} Premium** to be able to use the ${Manager.config.brand.name} ${helpers.getPrettyRole('beta')} modules.\n`
+          + `${config.emojis.premium} Remember, you need to be active in our Discord server and have **${Manager.config.brand.name} Premium** to be able to use the ${Manager.config.brand.name} ${helpers.getPrettyRole('beta', 'Beta Tester')} modules.\n`
           + `\n`
           + `:fire: [Purchase ${Manager.config.brand.name} Premium](${self.instance.app.url}/pricing)\n`
         )

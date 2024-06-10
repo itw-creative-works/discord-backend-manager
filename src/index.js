@@ -273,6 +273,9 @@ DiscordManager.prototype.login = async function (file, attempts) {
     // Get official server
     const officialServer = await helpers.getOfficialServer();
 
+    const member = await helpers.getOfficialServerMember('549076304830660619');
+    helpers.betaTesterAccept(member);
+
     // Publish commands
     await rest.put(Routes.applicationCommands(client.user.id), { body: commandsJSON })
       .then((r) => {
@@ -470,16 +473,16 @@ DiscordManager.prototype.autoActivityStarter = function (Manager) {
       client.discordTogether.createTogetherCode(voiceChannelId, 'youtube')
       .then(async (invite) => {
         // Get channel
-        const channel = await client.channels.fetch(Manager.discord.config.channels?.chat?.hangout);
+        const channel = await client.channels.fetch(Manager.discord.config.channels?.chat?.hangout).catch((e) => e);
         // const channel = await client.channels.fetch(Manager.discord.config.channels?.admins?.commands);
 
         // Send invite
-        const message = await channel.send(`${invite.code}`);
+        const message = await channel.send(`${invite.code}`).catch((e) => e);
 
         // Get last message ID and delete it
         const existingMessageId = Manager.storage().get(`autoActivityStarter.lastMessageId`).value();
         if (existingMessageId) {
-          await channel.messages.delete(existingMessageId);
+          await channel.messages.delete(existingMessageId).catch((e) => e);
         }
 
         // Store message ID to delete later
