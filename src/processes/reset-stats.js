@@ -1,8 +1,8 @@
 module.exports = {
   data: {
     interval: false,
-    initialDelay: false,
     runInitially: true,
+    initialDelay: false,
     enabled: true,
   },
   execute: async function (instance, options) {
@@ -68,7 +68,7 @@ module.exports = {
       reset('month', fireDate);
     });
 
-    if (process.env.ENVIRONMENT === 'development') {
+    if (assistant.isDevelopment()) {
       // reset('week')
       // reset('month')
     }

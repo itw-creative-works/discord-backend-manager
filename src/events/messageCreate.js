@@ -15,72 +15,79 @@ module.exports = async function (instance, message) {
   const isOfficialServer = message?.guild?.id === config.main.server;
   const isDM = message.channel.type === ChannelType.DM;
 
+  // Ignore bots
   if (message.author.bot) { return}
 
-  if (isOfficialServer || isDM) {
-    const member = isOfficialServer ? message.member : message.author;
+  // assistant.log(`[Message] ${message.author.username} (${message.channel.name}):`, message.guild.name, message.content);
 
-    assistant.log(`[Message] ${message.author.username} (${message.channel.name}):`, message.content);
+  // Ignore if not official server or DM
+  if (!isOfficialServer && !isDM) { return }
 
-    if (isOfficialServer) {
-      const messagePath = `discord.session.members.${member.id}.messages`;
-      const messages = get(Manager, messagePath, []).concat({channel: message.channel.id, timestamp: new Date().toISOString()});
+  // Get member
+  const member = isOfficialServer ? message.member : message.author;
 
-      // Save message count
-      set(Manager, messagePath, messages);
+  // Log message
+  assistant.log(`[Message] ${message.author.username} (${message.channel.name}):`, message.content);
 
-      // Count for this channel
-      // const messageCount = messages.filter(item => item.channel === message.channel.id).length;
+  // Process message
+  if (isOfficialServer) {
+    const messagePath = `discord.session.members.${member.id}.messages`;
+    const messages = get(Manager, messagePath, []).concat({channel: message.channel.id, timestamp: new Date().toISOString()});
 
-      processNormalMessage(instance, member, message);
-      processAutoSupport(instance, member, message, messages);
-      processStaffPremium(instance, member);
-    } else if (isDM) {
-      // Is an active Giveaway
-      const activeGiveaway = await helpers.resolveActiveGiveaway();
-      if (activeGiveaway.daysUntilExpire <= 0 && activeGiveaway.winner.id === member.id && !activeGiveaway.winner.claimed) {
-		    const giveaway = await helpers.getOfficialServerChannel('events.giveaway');
+    // Save message count
+    set(Manager, messagePath, messages);
 
-        // Store claimed
-			  Manager.storage().set('giveaway.winner.claimed', true).write();
+    // Count for this channel
+    // const messageCount = messages.filter(item => item.channel === message.channel.id).length;
 
-        // Send DM
-        await message.reply({
-          content: `${config.emojis.celebrate} Congratulations, **${helpers.displayMember(member, true)}**, you have successfully **claimed your prize** for the **${activeGiveaway.prize}** giveaway! \n\n:heart_decoration: Please be patient while a staff member sends your prize to you!`,
-        });
+    processNormalMessage(instance, member, message);
+    processAutoSupport(instance, member, message, messages);
+    processStaffPremium(instance, member);
+  } else if (isDM) {
+    // Is an active Giveaway
+    const activeGiveaway = await helpers.resolveActiveGiveaway();
+    if (activeGiveaway.daysUntilExpire <= 0 && activeGiveaway.winner.id === member.id && !activeGiveaway.winner.claimed) {
+      const giveaway = await helpers.getOfficialServerChannel('events.giveaway');
 
-        await giveaway.send({
-          content: `${config.emojis.celebrate} **${helpers.displayMember(member, true)}** has claimed their prize for the **${activeGiveaway.prize}** giveaway! \n\n:heart_decoration: Thank you everyone for entering. There will be more giveaways soon! :relaxed:`,
-        });
+      // Store claimed
+      Manager.storage().set('giveaway.winner.claimed', true).write();
 
-			  await helpers.updateActiveGiveaway()
-
-        return;
-      }
-
-      // Get channels and emojis
-      const hangout = await helpers.getOfficialServerChannel('chat.hangout');
-      const support = await helpers.getOfficialServerChannel('chat.support');
-
-      // Otherwise, send them a message to bring them to the server
+      // Send DM
       await message.reply({
-        content: (``
-          + `Hi, **${member}**. I am unable to assist you over DM—please join our ${config.emojis.mascot} **${Manager.config.brand.name} Discord Server**! ${config.emojis.mascot} \n`
-          + `\n`
-          + `**Do you need help?**\n`
-          + `Post your question in our support channel: ${support} \n`
-          + `\n`
-          + `**Do you want to chat with our community?**\n`
-          + `Come hang out in our public discussion channel: ${hangout} \n`
-          + `\n`
-          + `We sincerely hope you enjoy your stay in our community!\n`
-          + `\n`
-        )
+        content: `${config.emojis.celebrate} Congratulations, **${helpers.displayMember(member, true)}**, you have successfully **claimed your prize** for the **${activeGiveaway.prize}** giveaway! \n\n:heart_decoration: Please be patient while a staff member sends your prize to you!`,
       });
 
-      // Send to log
-      helpers.sendToLogChannel(`${member} (${message.author.username}) DM'd me: \n${message.content}`)
+      await giveaway.send({
+        content: `${config.emojis.celebrate} **${helpers.displayMember(member, true)}** has claimed their prize for the **${activeGiveaway.prize}** giveaway! \n\n:heart_decoration: Thank you everyone for entering. There will be more giveaways soon! :relaxed:`,
+      });
+
+      await helpers.updateActiveGiveaway()
+
+      return;
     }
+
+    // Get channels and emojis
+    const hangout = await helpers.getOfficialServerChannel('chat.hangout');
+    const support = await helpers.getOfficialServerChannel('chat.support');
+
+    // Otherwise, send them a message to bring them to the server
+    await message.reply({
+      content: (``
+        + `Hi, **${member}**. I am unable to assist you over DM—please join our ${config.emojis.mascot} **${Manager.config.brand.name} Discord Server**! ${config.emojis.mascot} \n`
+        + `\n`
+        + `**Do you need help?**\n`
+        + `Post your question in our support channel: ${support} \n`
+        + `\n`
+        + `**Do you want to chat with our community?**\n`
+        + `Come hang out in our public discussion channel: ${hangout} \n`
+        + `\n`
+        + `We sincerely hope you enjoy your stay in our community!\n`
+        + `\n`
+      )
+    });
+
+    // Send to log
+    helpers.sendToLogChannel(`${member} (${message.author.username}) DM'd me: \n${message.content}`)
   }
 
 }

@@ -1,8 +1,8 @@
 module.exports = {
   data: {
     interval: 3.6e+6 * 1, // 1 hour
-    initialDelay: 0, // 1 hour
     runInitially: true,
+    initialDelay: 0, // 1 hour
     // enabled: process.env.ENVIRONMENT === 'development',
     enabled: false,
   },

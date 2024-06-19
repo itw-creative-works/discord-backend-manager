@@ -8,6 +8,9 @@ module.exports = async function (instance, member, message) {
   // Libraries
   const powertools = Manager.require('node-powertools');
 
+  // Get storage
+  const storage = Manager.storage({name: 'messages'});
+
   // Set variables
   const channel = message.channel;
 
@@ -15,12 +18,22 @@ module.exports = async function (instance, member, message) {
   profile.reward(member, 'message', channel);
 
   // Determine activity
-  if (process.env.ENVIRONMENT === 'development') {
+  if (assistant.isDevelopment()) {
     await processes['sync-roles'].execute(instance, {id: member.id})
   }
 
+  // Get messages
+  const messages = storage.get(member.id, {}).value();
+
+  // Bump total messages and channel messages
+  messages.total = (messages.total || 0) + 1;
+  messages[channel.id] = (messages[channel.id] || 0) + 1;
+
+  // Clear all messages
+  storage.set(member.id, messages).write();
+
   // Only small chance of it happening
-  if (powertools.random(0, 100) < 90 && Manager.assistant.meta.environment === 'production') {
+  if (powertools.random(0, 100) < 90 && assistant.isProduction()) {
     return;
   }
 }

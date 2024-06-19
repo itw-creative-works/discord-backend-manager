@@ -3,8 +3,8 @@ const { EmbedBuilder, roleMention } = require('discord.js');
 module.exports = {
   data: {
     interval: 60000,
-    initialDelay: false,
     runInitially: true,
+    initialDelay: false,
     enabled: true,
   },
   execute: async function (instance, options) {
@@ -149,7 +149,7 @@ module.exports = {
       const lastActivityHoursAgo = moment().diff(lastActivity, 'hours', true);
       const isActive = lastActivityHoursAgo < 24 || hasActiveRole;
       const hoursToClaim = isActive ? 8 : 0.25;
-      const claimUntilDate = moment().add(process.env.ENVIRONMENT === 'development' ? 1 : hoursToClaim * 60, 'minutes')
+      const claimUntilDate = moment().add(assistant.isDevelopment() ? 1 : hoursToClaim * 60, 'minutes')
 
       // Set the claimUntilDate
       Manager.storage().set('giveaway.winner', {

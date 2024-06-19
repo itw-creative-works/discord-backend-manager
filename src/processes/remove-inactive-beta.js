@@ -3,10 +3,10 @@ const { Role, EmbedBuilder, roleMention, channelMention } = require('discord.js'
 module.exports = {
   data: {
     interval: 3.6e+6 * 13, // 12 hours
+    runInitially: true,
     initialDelay: process.env.ENVIRONMENT === 'development'
       ? false // Disabled
       : 3.6e+6 * 1, // 1 hour
-    runInitially: true,
     // enabled: false,
     // enabled: true,
     enabled: process.env.ENVIRONMENT !== 'development',
@@ -30,7 +30,7 @@ module.exports = {
         const discordMemberIsPremium = discordMemberIsValid && discordMember.roles.cache.has(config.roles.premium);
         const discordMemberIsBooster = discordMemberIsValid && discordMember.roles.cache.has(config.roles.serverBooster);
 
-        if (process.env.ENVIRONMENT === 'development') {
+        if (assistant.isDevelopment()) {
           assistant.log(`remove-inactive-beta ${index}: uid=${data.auth.uid}, discord=${discordId}, valid=${discordMemberIsValid}, active=${discordMemberIsActive}, premium=${discordMemberIsPremium}, booster=${discordMemberIsBooster}`);
         }
 
@@ -41,7 +41,6 @@ module.exports = {
         ) {
           return resolve();
         }
-
 
         // Remove beta role and application
         await Manager.libraries.initializedAdmin.firestore().doc(`users/${data.auth.uid}`)

@@ -5,6 +5,7 @@ let powertools;
 let moment;
 let jetpack;
 let get;
+let argv;
 
 function Helpers(instance) {
   const self = this;
@@ -19,6 +20,7 @@ function Helpers(instance) {
   moment = self.Manager.require('moment');
   jetpack = self.Manager.require('fs-jetpack');
   get = self.Manager.require('lodash').get;
+  argv = self.Manager.require('yargs').argv;
 
   // Return
   return self;
@@ -41,7 +43,11 @@ Helpers.prototype.getOfficialServerChannel = async function (path) {
 
   return await client.guilds.fetch(config.main.server)
   .then(async (server) => {
-    const channel = get(config.channels, path);
+    const channel = self.isSnowFlake(path)
+      ? path
+      : get(config.channels, path)
+
+    // Get channel
     return await server.channels.fetch(channel);
   })
 }
@@ -116,7 +122,6 @@ Helpers.prototype.displayCommand = function (name) {
     assistant.warn(`Command not found: ${name}`);
     return `\`/${name}\``
   }
-
 }
 
 Helpers.prototype.getPrettyRole = function (id, overwrite) {
@@ -126,9 +131,8 @@ Helpers.prototype.getPrettyRole = function (id, overwrite) {
   const assistant = self.instance.assistant;
 
   // Fix beta
-  if (id === 'beta') {
-    id = 'betaTester';
-  }
+  id = resolveRole(id);
+
   // Check if its a snowflake
   const isSnowFlake = self.isSnowFlake(id);
 
@@ -432,11 +436,14 @@ Helpers.prototype.betaTesterAccept = async function (member, uid) {
         .setColor(config.colors.purple)
         .setTitle(`${Manager.config.brand.name} Beta Tester Acceptance`)
         .setDescription(``
-          + `${config.emojis.betaTester} Congrats, ${member}! You have been accepted into the **${Manager.config.brand.name}** ${helpers.getPrettyRole('beta', 'Beta Tester')} Program!\n`
+          + `Congrats, ${member}! You have been accepted into the **${Manager.config.brand.name}** ${helpers.getPrettyRole('beta', 'Beta Tester')} Program!\n`
           + `\n`
-          + `${config.emojis.premium} Remember, you need to be active in our Discord server and have **${Manager.config.brand.name} Premium** to be able to use the ${Manager.config.brand.name} ${helpers.getPrettyRole('beta', 'Beta Tester')} modules.\n`
+          // + `Remember, you need to be active in our Discord server and have **${Manager.config.brand.name} Premium** to be able to use the ${Manager.config.brand.name} ${helpers.getPrettyRole('beta', 'Beta Tester')} modules.\n`
+          + `To stay in the program, you need to maintain **at least one** of the following statuses:\n`
+          + `${helpers.getPrettyRole('premium', Manager.config.brand.name + ' Premium')}\n`
+          + `${helpers.getPrettyRole('active', 'Active Member')}\n`
           + `\n`
-          + `:fire: [Purchase ${Manager.config.brand.name} Premium](${self.instance.app.url}/pricing)\n`
+          + `:fire: [Purchase ${Manager.config.brand.name} Premium](${self.instance.app.url}/pricing?utm_source=discord-beta-acceptance&utm_medium=discord&utm_campaign=beta-acceptance)\n`
         )
     ]
   })
@@ -545,7 +552,7 @@ Helpers.prototype.sendToOfficialServerChannel = function (channel, message) {
   const assistant = self.instance.assistant;
 
   self.getOfficialServerChannel(channel)
-  .then(channel => {
+  .then((channel) => {
     return channel.send(message)
   })
 }
@@ -744,7 +751,7 @@ Helpers.prototype.command = function (name) {
   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
   const assistant = self.instance.assistant;
 
-  return process.env.ENVIRONMENT !== 'development'
+  return assistant.isProduction()
     ? name
     : `_${name}`
 }
@@ -883,7 +890,7 @@ Helpers.prototype.updateActiveGiveaway = function () {
           : `**TBA**`
       }\n`
       + `${
-        process.env.ENVIRONMENT === 'development'
+        assistant.isDevelopment()
           ? `\n:warning::warning::warning: This contest was started in DEVELOPMENT! It is not active.`
           : ``
       }\n`
@@ -920,6 +927,93 @@ Helpers.prototype.updateActiveGiveaway = function () {
     })
 
     return resolve(description);
+  });
+}
+
+Helpers.prototype.resolveRole = function (input) {
+  const self = this;
+  const Manager = self.Manager;
+  const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+
+  // Resolve role
+  input = resolveRole(input);
+
+  // Return
+  if (typeof input === 'string') {
+    return config.roles[input];
+  } else if (Array.isArray(input)) {
+    return input.map(i => config.roles[i]);
+  }
+}
+
+function resolveRole(id) {
+  // If its an array, resolve each item in the array
+  if (Array.isArray(id)) {
+    return id.map(resolveRole);
+  }
+
+  // Fix aliases
+  if (id === 'beta') {
+    id = 'betaTester';
+  } else if (id === 'booster') {
+    id = 'serverBooster';
+  }
+
+  // Return
+  return id;
+}
+
+// Auto activity starter
+Helpers.prototype.autoActivityStarter = function () {
+  const self = this;
+  const Manager = self.Manager;
+  const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
+  const assistant = Manager.assistant;
+
+  return new Promise(function(resolve, reject) {
+    const voiceChannelId = Manager.discord.config.channels?.voice?.streaming;
+
+    // If voice channel is not set, skip
+    if (!voiceChannelId) {
+      return resolve();
+    }
+
+    // If argv is set, skip
+    if (argv.autoActivityStarter === 'false') {
+      return resolve();
+    }
+
+    // Join voice channel
+    helpers.joinVoiceChannel(voiceChannelId)
+    .then(async (connection) => {
+      const voiceChannel = await helpers.getOfficialServerChannel(voiceChannelId);
+      const hangoutChannel = await helpers.getOfficialServerChannel(Manager.discord.config.channels?.chat?.hangout);
+
+      // Invite
+      const invite = await voiceChannel.createInvite({
+        temporary: false,
+        maxAge: 60 * 60 * 24 * 7, // 7 days (since it always makes a NEW one FUCK)
+        maxUses: 0,
+        unique: false,
+        targetApplication: '880218394199220334',
+        targetType: 2,
+      })
+
+      // Send invite
+      const message = await hangoutChannel.send(`https://discord.com/invite/${invite.code}`).catch((e) => e);
+
+      // Get last message ID and delete it
+      const existingMessageId = Manager.storage().get(`autoActivityStarter.lastMessageId`).value();
+      if (existingMessageId) {
+        await hangoutChannel.messages.delete(existingMessageId).catch((e) => e);
+      }
+
+      // Store message ID to delete later
+      Manager.storage().set(`autoActivityStarter.lastMessageId`, message.id).write();
+
+      // Log
+      assistant.log('🎵 Sent YouTube Together invite to chat channel');
+    })
   });
 }
 

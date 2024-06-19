@@ -27,6 +27,15 @@ module.exports = function (instance) {
         required: false,
       },
 
+      // // Promotion
+      promotion: {
+        enabled: {
+          types: ['boolean'],
+          default: true,
+          required: false,
+        },
+      },
+
       // Chatsy
       chatsy: {
         accountId: {

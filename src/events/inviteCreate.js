@@ -7,6 +7,16 @@ module.exports = async function (instance, invite) {
 
   if (invite.guild.id === config.main.server) {
     assistant.log(`[inviteCreate] ${invite.inviter.username}: code=${invite.code}, uses=${invite.uses}`, );
-    invites.get(invite.guild.id).set(invite.code, invite.uses);
+
+    // Get existing invites
+    const existing = invites.get(invite.guild.id);
+
+    // If invite doesn't exist, quit here
+    if (!existing) {
+      return;
+    }
+
+    // Set invite in existing
+    existing.set(invite.code, invite.uses);
   }
 }

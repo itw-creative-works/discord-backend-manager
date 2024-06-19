@@ -21,16 +21,16 @@ module.exports = function (instance, member, message, messages) {
     const mentions = message.mentions.members.map(member => member);
     const mentionedBot = mentions.some(mention => mention.id === client.user.id);
     const mentionedPrivelagedMember = !mentionedBot && mentions.some(mention => helpers.isPrivelagedMember(mention));
-    const messagesFromThisChannel = messages.filter(msg => msg.channel === channel.id).length;
+    const messagesFromThisChannel = messages.filter(msg => msg.channel === channel.id);
 
-    assistant.log('Processing auto support', `mentionedBot=${mentionedBot}, mentionedPrivelagedMember=${mentionedPrivelagedMember}, messagesFromThisChannel=${messagesFromThisChannel}, message=${messageContent}`);
+    assistant.log('Processing auto support', `mentionedBot=${mentionedBot}, mentionedPrivelagedMember=${mentionedPrivelagedMember}, messagesFromThisChannel=${messagesFromThisChannel.length}, message=${messageContent}`);
 
     // Check if privelaged member is mentioned
     if (mentionedPrivelagedMember) {
       assistant.log('Backing out because privelaged member is mentioned');
 
-      // if (messagesFromThisChannel === 1) {
-      if (messagesFromThisChannel <= 3) {
+      // if (messagesFromThisChannel.length === 1) {
+      if (messagesFromThisChannel.length <= 3) {
         // Remind them they can get instant support from the bot by tagging it but will have to wait for a human if they tag a staff member
         await message.reply({
           embeds: [
@@ -43,6 +43,38 @@ module.exports = function (instance, member, message, messages) {
           ]
         });
       }
+
+      return
+    }
+
+    // Messages from this channel in the last 24 hours
+    const messagesFromThisChannel_24h = messages.filter(msg => new Date(msg.timestamp) > new Date(Date.now() - 86400000)).length;
+    const resolvedRoles = helpers.resolveRole(config.main.support.exemptRoles);
+    const isExempt = member.roles.cache.some((role) => resolvedRoles.includes(role.id));
+
+    // If user is is not exempt and has reached the daily message limit, send a message
+    if (
+      (messagesFromThisChannel_24h >= config.main.support.maxDailyMessages && !isExempt)
+      || (messageContent.includes('/test-support'))
+      // || true
+    ) {
+      assistant.log('Backing out because user has reached the daily message limit');
+
+      // Send ephemeral error
+      await message.reply({
+        embeds: [
+          new EmbedBuilder()
+            .setColor(config.colors.red)
+            .setDescription(``
+              + `Hey, **${helpers.displayMember(member, true)}**, you have reached the daily question limit.\n`
+              + `\n`
+              + `You can ask **unlimited questions** if you have any of the following roles:\n`
+              // + `${resolvedRoles.map(role => helpers.getPrettyRole(role)).join('\n')}\n`
+              + `${config.main.support.exemptRoles.map(role => helpers.getPrettyRole(role)).join('\n')}\n`
+              + `\n`
+            )
+        ]
+      })
 
       return
     }

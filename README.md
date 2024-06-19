@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://cdn.itwcreativeworks.com/assets/itw-creative-works/images/logo/itw-creative-works-brandmark-black-x.svg">
+  <a href="https://itwcreativeworks.com">
     <img src="https://cdn.itwcreativeworks.com/assets/itw-creative-works/images/logo/itw-creative-works-brandmark-black-x.svg" width="100px">
   </a>
 </p>
@@ -24,13 +24,13 @@
   <strong>Discord Bot Manager</strong> is an NPM module for backend and frontend developers that exposes powerful utilities and tools.
 </p>
 
-## Features
+## 🦄 Features
 * Easily setup a general purpose discord bot
 * Firebase integration
 * 30+ useful commands
 
-## Install Discord Bot Manager
-### Install via npm
+## 📦 Install Discord Bot Manager
+### Option 1: Install via npm
 Install with npm if you plan to use **Discord Bot Manager** in a Node.js project.
 ```shell
 npm install discord-bot-manager
@@ -73,10 +73,10 @@ And what to put for these files?
 BACKEND_MANAGER_KEY=your-backend-manager-key
 ```
 
-## Final Words
+## 🗨️ Final Words
 If you are still having difficulty, we would love for you to post a question to [the Discord Bot Manager issues page](https://github.com/itw-creative-works/discord-bot-manager/issues). It is much easier to answer questions that include your code and relevant files! So if you can provide them, we'd be extremely grateful (and more likely to help you find the answer!)
 
-## Projects Using this Library
+## 📚 Projects Using this Library
 [Somiibo](https://somiibo.com): A Social Media Bot with an open-source module library. <br>
 [StudyMonkey](https://studymonkey.ai): An AI tutor for students. <br>
 [JekyllUp](https://jekyllup.com): A website devoted to sharing the best Jekyll themes. <br>

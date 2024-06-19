@@ -7,6 +7,16 @@ module.exports = async function (instance, invite) {
 
   if (invite.guild.id === config.main.server) {
     assistant.log(`[inviteDelete] ${invite.inviter.username}: code=${invite.code}, uses=${invite.uses}`, );
-    invites.get(invite.guild.id).delete(invite.code);
+
+    // Get existing invites
+    const existing = invites.get(invite.guild.id);
+
+    // If invite doesn't exist, quit here
+    if (!existing) {
+      return;
+    }
+
+    // Remove invite from existing
+    existing.delete(invite.code);
   }
 }

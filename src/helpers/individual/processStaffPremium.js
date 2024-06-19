@@ -15,7 +15,7 @@ module.exports = async function (instance, member) {
   }
 
   // Only small chance of it happening
-  // if (powertools.random(0, 100) > 90 && Manager.assistant.meta.environment === 'production') {
+  // if (powertools.random(0, 100) > 90 && assistant.isProduction()) {
   if (powertools.random(0, 100) < 90) {
     return;
   }

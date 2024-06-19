@@ -3,10 +3,10 @@ const { Role, EmbedBuilder, roleMention } = require('discord.js');
 module.exports = {
   data: {
     interval: 3.6e+6 * 13, // 12 hours
+    runInitially: true,
     initialDelay: process.env.ENVIRONMENT === 'development'
       ? false // Disabled
       : 3.6e+6 * 1, // 1 hour
-    runInitially: true,
     // enabled: true,
     enabled: process.env.ENVIRONMENT !== 'development',
   },
@@ -33,7 +33,7 @@ module.exports = {
       let rolesToRemove = [];
       // assistant.log('Processing', member.id);
 
-      if (process.env.ENVIRONMENT === 'development') {
+      if (assistant.isDevelopment()) {
         assistant.log('Processing', member.id);
       }
 
@@ -43,12 +43,14 @@ module.exports = {
         const hasRole = !!member.roles.cache.get(role);
 
         // assistant.log('_addRole', member.user.username, roleName, hasRole);
-        if (!hasRole) {
-          rolesToAdd = rolesToAdd.concat(role);
-          rolesToRemove = rolesToRemove.filter(val => val !== role);
-          // assistant.log('...adding');
-          // assistant.log('_addRole', member.user.username, roleName, hasRole);
+        if (hasRole) {
+          return
         }
+
+        rolesToAdd = rolesToAdd.concat(role);
+        rolesToRemove = rolesToRemove.filter(val => val !== role);
+        // assistant.log('...adding');
+        // assistant.log('_addRole', member.user.username, roleName, hasRole);
       }
 
       async function _removeRole(member, role) {
@@ -56,12 +58,14 @@ module.exports = {
         const hasRole = !!member.roles.cache.get(role);
 
         // assistant.log('_removeRole', member.user.username, roleName, hasRole);
-        if (hasRole) {
-          rolesToRemove = rolesToRemove.concat(role);
-          rolesToAdd = rolesToAdd.filter(val => val !== role);
-          // assistant.log('...removing');
-          // assistant.log('_removeRole', member.user.username, roleName, hasRole);
+        if (!hasRole) {
+          return
         }
+
+        rolesToRemove = rolesToRemove.concat(role);
+        rolesToAdd = rolesToAdd.filter(val => val !== role);
+        // assistant.log('...removing');
+        // assistant.log('_removeRole', member.user.username, roleName, hasRole);
       }
 
       async function _resolveRoles() {
@@ -143,18 +147,17 @@ module.exports = {
             && lastActiveDays < 7
             && (thisWeekMessages > 30 || thisMonthMessages > 60)
           ) {
-
             // Log the change
             helpers.sendToLogChannel(activeMessage.replace(/{status}/ig, 'granted'))
 
             // Only actually add the role if it's production
-            if (process.env.ENVIRONMENT !== 'development') {
+            if (assistant.isProduction()) {
               _addRole(member, config.roles.active);
 
               const dest = await helpers.getOfficialServerChannel('chat.hangout')
               await helpers.sendNormal(dest, `**${helpers.displayMember(member, true)}** has been granted the **${config.emojis.active} ${helpers.getPrettyRole('active')}** role for being a superstar!`, {embed: true})
 
-              // helpers.getOfficialServerChannel(process.env.ENVIRONMENT === 'development' ? 'admins.testLog' : 'chat.hangout')
+              // helpers.getOfficialServerChannel(assistant.isDevelopment() ? 'admins.testLog' : 'chat.hangout')
               // .then(channel => {
               //   channel.send({
               //     embeds: [
@@ -179,6 +182,10 @@ module.exports = {
             helpers.betaTesterAccept(member, linkedAccount.auth.uid)
           }
 
+          // Remove empty roles
+          rolesToAdd = rolesToAdd.filter(val => !!val);
+          rolesToRemove = rolesToRemove.filter(val => !!val);
+
           // Test Discord OAauth2
           // fetch('https://discord.com/api/users/@me', {
           // 	method: 'get',
@@ -196,10 +203,12 @@ module.exports = {
       // Resolve roles
       await _resolveRoles();
 
-      // Actually add/remove the roles
+      // Add roles
       if (rolesToAdd.length > 0) {
         await member.roles.add(rolesToAdd).catch(e => errors = errors.concat([[`Failed to add roles`, member.user.username, member.id, rolesToAdd, e]]))
       }
+
+      // Remove roles
       if (rolesToRemove.length > 0) {
         await member.roles.remove(rolesToRemove).catch(e => errors = errors.concat([[`Failed to remove roles`, member.user.username, member.id, rolesToRemove, e]]))
       }

@@ -3,8 +3,8 @@ const { Role, EmbedBuilder, roleMention } = require('discord.js');
 module.exports = {
   data: {
     interval: false,
-    initialDelay: false,
     runInitially: true,
+    initialDelay: false,
     // enabled: process.env.ENVIRONMENT === 'development',
     enabled: false,
   },

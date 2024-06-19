@@ -1,8 +1,8 @@
 module.exports = {
   data: {
-    interval: false, // Disabled
+    interval: 3.6e+6 * 24, // 24 hours
     runInitially: true,
-    initialDelay: false, // Disabled
+    initialDelay: 1, // 1 hour
     enabled: false,
   },
   execute: async function (instance, options) {
@@ -10,13 +10,12 @@ module.exports = {
     const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
     const assistant = instance.assistant;
 
-    // Cache all members in the official server
-    const members = await helpers.getOfficialServerMember();
+    // Log
+    assistant.log(`🚀 Clearing local messages...`);
 
-    // Fetch all roles for each member
-    members
-    .forEach(member => {
-      member.roles.fetch();
-    });
+    const storage = Manager.storage({name: 'messages'});
+
+    // Clear all messages
+    storage.setState({}).write();
   }
 }

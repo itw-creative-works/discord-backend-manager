@@ -1,8 +1,8 @@
 module.exports = {
   data: {
     interval: 3.6e+6 * 2, // 1 hours
-    initialDelay: 3.6e+6 * 1, // 1 hour
     runInitially: true,
+    initialDelay: 3.6e+6 * 1, // 1 hour
     enabled: true,
   },
   execute: async function (instance, options) {

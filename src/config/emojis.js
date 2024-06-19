@@ -96,7 +96,7 @@ module.exports = function (instance) {
         default: '<:admin:1020012160014893186>',
         required: false,
       },
-      booster: {
+      serverBooster: {
         types: ['string'],
         default: '<:booster:1020012158458798272>',
         required: false,

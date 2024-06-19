@@ -1,6 +1,6 @@
 const { Client, GatewayIntentBits, Partials, Routes, Collection, ActivityType, channelMention, REST } = require('discord.js');
 const { joinVoiceChannel } = require('@discordjs/voice');
-const { DiscordTogether } = require('discord-together');
+// const { DiscordTogether } = require('discord-together');
 
 // Setup main manager
 const cwd = process.cwd();
@@ -146,7 +146,7 @@ DiscordManager.prototype.login = async function (file, attempts) {
   const rest = new REST({ version: '10' }).setToken(DISCORD_TOKEN);
 
   // Set up Discord Together
-  client.discordTogether = new DiscordTogether(client);
+  // client.discordTogether = new DiscordTogether(client);
 
   // On ready
   client.once('ready', async () => {
@@ -242,7 +242,6 @@ DiscordManager.prototype.login = async function (file, attempts) {
         currentProcess.data.name = file.name;
 
         set(Manager, `discord.processes.${currentProcess.data.name}`, currentProcess);
-
         function _execute(p) {
           assistant.log(`Running process ${p.data.name}`);
           p.execute(instance);
@@ -306,7 +305,7 @@ DiscordManager.prototype.login = async function (file, attempts) {
     // });
 
     // Make bot join voice channel XXX and start the YouTube Activity
-    self.autoActivityStarter(Manager);
+    helpers.autoActivityStarter();
 
     // Log
     assistant.log(`🤖 Logged in as ${client.user.tag}!`);
@@ -316,13 +315,17 @@ DiscordManager.prototype.login = async function (file, attempts) {
   // 	assistant.log('[Client Debug]', event);
   // })
 
-  client.on('warn', function (event) {
+  client.on('warn', (event) => {
     assistant.warn('[Discord warn]', event);
-  })
+  });
 
-  client.on('error', function (event) {
+  client.on('error', (event) => {
     assistant.error('[Discord error]', event);
-  })
+  });
+
+  client.on('disconnect', (message) => {
+    assistant.error('[Discord disconnect]', message);
+  });
 
   // Fetch app Object
   const app = await Manager.getApp();
@@ -449,46 +452,6 @@ function iterate(pattern, customDir, options) {
 
     // Return the result
     return resolve(result);
-  });
-}
-
-// Auto activity starter
-DiscordManager.prototype.autoActivityStarter = function (Manager) {
-  const self = this;
-  const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
-  const assistant = Manager.assistant;
-
-  return new Promise(function(resolve, reject) {
-    const voiceChannelId = Manager.discord.config.channels?.voice?.streaming;
-
-    if (!voiceChannelId) {
-      return resolve();
-    }
-
-    helpers.joinVoiceChannel(voiceChannelId)
-    .then((connection) => {
-      client.discordTogether.createTogetherCode(voiceChannelId, 'youtube')
-      .then(async (invite) => {
-        // Get channel
-        const channel = await client.channels.fetch(Manager.discord.config.channels?.chat?.hangout).catch((e) => e);
-        // const channel = await client.channels.fetch(Manager.discord.config.channels?.admins?.commands);
-
-        // Send invite
-        const message = await channel.send(`${invite.code}`).catch((e) => e);
-
-        // Get last message ID and delete it
-        const existingMessageId = Manager.storage().get(`autoActivityStarter.lastMessageId`).value();
-        if (existingMessageId) {
-          await channel.messages.delete(existingMessageId).catch((e) => e);
-        }
-
-        // Store message ID to delete later
-        Manager.storage().set(`autoActivityStarter.lastMessageId`, message.id).write();
-
-        // Log
-        assistant.log('🎵 Sent YouTube Together invite to chat channel');
-      });
-    })
   });
 }
 
