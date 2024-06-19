@@ -45,7 +45,7 @@ const manager = new DiscordBotManager();
 manager.init();
 ```
 
-## Setup
+## 🔧 Setup
 ### Create folder structure
 ```
 servers
