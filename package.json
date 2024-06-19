@@ -1,11 +1,11 @@
 {
   "name": "discord-backend-manager",
-  "version": "1.0.15",
+  "version": "1.0.17",
   "description": "Easily setup a general purpose discord bot to manage your server.",
   "main": "dist/index.js",
   "scripts": {
     "test": "npm run prepare && ./node_modules/mocha/bin/mocha test/ --recursive --timeout=10000",
-    "prepare": "node -e 'require(`prepare-package`)()'",
+    "prepare": "node -e \"require('prepare-package')()\"",
     "prepare:watch": "nodemon -w ./src -e '*' --exec 'npm run prepare'"
   },
   "engines": {
@@ -36,10 +36,11 @@
     "@discordjs/voice": "0.14.0",
     "backend-manager": "^3.2.169",
     "discord.js": "14.15.2",
+    "itwcw-package-analytics": "^1.0.3",
     "node-schedule": "^2.1.0"
   },
   "devDependencies": {
     "mocha": "^8.4.0",
-    "prepare-package": "^1.1.8"
+    "prepare-package": "^1.1.11"
   }
 }
