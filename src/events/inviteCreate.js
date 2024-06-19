@@ -6,7 +6,7 @@ module.exports = async function (instance, invite) {
   const assistant = instance.assistant;
 
   if (invite.guild.id === config.main.server) {
-    assistant.log(`[inviteCreate] ${invite.inviter.username}: code=${invite.code}, uses=${invite.uses}`, );
+    assistant.log(`[inviteCreate] ${invite?.inviter?.username}: code=${invite.code}, uses=${invite.uses}`, );
 
     // Get existing invites
     const existing = invites.get(invite.guild.id);
