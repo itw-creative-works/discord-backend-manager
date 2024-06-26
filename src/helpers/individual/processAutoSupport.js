@@ -54,7 +54,7 @@ module.exports = function (instance, member, message, messages) {
 
     // If user is is not exempt and has reached the daily message limit, send a message
     if (
-      (messagesFromThisChannel_24h >= config.main.support.maxDailyMessages && !isExempt)
+      (messagesFromThisChannel_24h > config.main.support.maxDailyMessages && !isExempt)
       || (messageContent.includes('/test-support'))
       // || true
     ) {

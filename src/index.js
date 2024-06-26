@@ -10,7 +10,6 @@ const Manager = (new (require('backend-manager'))).init(exports, {
   cwd: cwd,
   projectPackageDirectory: cwd,
   fetchStats: false,
-  // uniqueAppName: 'itwcreativeworks',
   log: true,
 });
 
@@ -33,13 +32,20 @@ function DiscordManager() {
   return self;
 }
 
-DiscordManager.prototype.init = function (file) {
+DiscordManager.prototype.init = function (options) {
   const self = this;
 
   // Check if init
   if (self.initialized) {
     return self;
   }
+
+  // Fix options
+  options = options || {};
+  options.logSavePath = options.logSavePath || false;
+
+  // Attach options
+  self.options = options;
 
   // Set Manager property
   Manager.DiscordManager = self;
@@ -93,7 +99,6 @@ DiscordManager.prototype.registerUniversalEntities = function (server, app) {
   })
 }
 
-
 DiscordManager.prototype.login = async function (file, attempts) {
   const self = this;
 
@@ -107,6 +112,7 @@ DiscordManager.prototype.login = async function (file, attempts) {
     fetchStats: false,
     uniqueAppName: name,
     log: false,
+    logSavePath: path.join(self.options.logSavePath, name),
   });
   Manager.DiscordManager = self;
 
