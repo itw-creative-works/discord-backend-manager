@@ -50,14 +50,6 @@ module.exports = async function (instance, interaction) {
   // Get the Discord profile
   const discordProfile = await profile.get(interaction?.member?.id);
 
-  // Require people to send a message before using commands
-  // MOVED TO BETA
-  // if (isOfficialServer) {
-  //   if (discordProfile.stats.message.total <= 0) {
-  //     return helpers.sendError(interaction, `Please introduce yourself in the ${channelMention(config.channels.chat.hangout)} channel before applying for the ${helpers.getPrettyRole('beta')} role.`, {embed: false})
-  //   }
-  // }
-
   // COMMAND TYPES
   if (isChatInputCommand) {
     // // Check for blocking

@@ -40,8 +40,8 @@ module.exports = {
     // Get the Discord profile
 		const discordProfile = await profile.get(options.user.id);
 
-    // Check if user has sent at least 3 messages
-    if (discordProfile.stats.message.total < 3) {
+    // Check if user has introduced themselves
+    if (discordProfile.stats.message.total < 1) {
       response.setColor(config.colors.red)
         .setTitle('Beta Tester application failed')
         .setDescription(`${config.emojis.mascot} **${helpers.displayMember(options.user)}**, you are too new! Please introduce yourself in the ${channelMention(config.channels.chat.hangout)} channel.`);
