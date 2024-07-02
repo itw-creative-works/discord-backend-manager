@@ -33,6 +33,11 @@ module.exports = {
 
 		let message = '';
 
+    // Check if music feature is enabled
+    if (!client.distube) {
+      return helpers.sendError(interaction, `The music feature is temporarily disabled.`, {embed: true});
+    }
+
 		// https://distube.js.org/#/docs/DisTube/stable/class/DisTube
 
 		if (subcommand === 'play') {
