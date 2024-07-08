@@ -1,6 +1,6 @@
 {
   "name": "discord-backend-manager",
-  "version": "1.0.25",
+  "version": "1.0.26",
   "description": "Easily setup a general purpose discord bot to manage your server.",
   "main": "dist/index.js",
   "scripts": {
@@ -37,8 +37,8 @@
   "dependencies": {
     "@discordjs/voice": "0.14.0",
     "backend-manager": "^3.2.174",
-    "discord.js": "14.15.2",
-    "itwcw-package-analytics": "^1.0.4",
+    "discord.js": "^14.15.3",
+    "itwcw-package-analytics": "^1.0.6",
     "node-schedule": "^2.1.0"
   },
   "devDependencies": {
