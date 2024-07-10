@@ -125,9 +125,10 @@ module.exports = {
     // Loop through members
     for (let i = 0; i < chosenGuildMembers.length; i++) {
       const member = chosenGuildMembers[i];
+      const inviteUrl = `https://discord.com/invite/${invite.code}`;
 
       // Log member
-      assistant.log(`📣 Promoting to ${member.user.username} (${member.user.id})`);
+      assistant.log(`📣 Promoting to ${member.user.username} (${member.user.id}) with url ${inviteUrl}`);
 
       // Send message
       member.send({
@@ -139,7 +140,7 @@ module.exports = {
           + `\n`
           + `Come see what all the hype is about!\n`
           + `\n`
-          + `https://discord.com/invite/${invite.code}`
+          + `${inviteUrl}`
       });
     }
   }
