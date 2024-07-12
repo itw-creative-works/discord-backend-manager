@@ -48,13 +48,13 @@ module.exports = function (instance, member, message, messages) {
     }
 
     // Messages from this channel in the last 24 hours
-    const messagesFromThisChannel_24h = messages.filter(msg => new Date(msg.timestamp) > new Date(Date.now() - 86400000)).length;
+    const messagesFromThisChannel_24h = messagesFromThisChannel.filter(msg => new Date(msg.timestamp) > new Date(Date.now() - 86400000));
     const resolvedRoles = helpers.resolveRole(config.main.support.exemptRoles);
     const isExempt = member.roles.cache.some((role) => resolvedRoles.includes(role.id));
 
     // If user is is not exempt and has reached the daily message limit, send a message
     if (
-      (messagesFromThisChannel_24h > config.main.support.maxDailyMessages && !isExempt)
+      (messagesFromThisChannel_24h.length > config.main.support.maxDailyMessages && !isExempt)
       || (messageContent.includes('/test-support'))
       // || true
     ) {
