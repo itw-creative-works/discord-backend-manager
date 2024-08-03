@@ -1,3 +1,7 @@
+// Libraries
+const { PermissionsBitField } = require('discord.js');
+
+// Constants
 const ITW_SERVER = '639607263098699779';
 
 module.exports = {
@@ -82,6 +86,7 @@ module.exports = {
         const isHighMemberCount = chosenGuild.memberCount > 10;
         const username = member.user.username;
 
+
         // Skip bots
         if (member.user.bot) {
           // assistant.log('--- Skipping bot', username);
@@ -91,14 +96,12 @@ module.exports = {
         // Skip moderators and above
         // Skip roles ONLY if member count is high
         if (isHighMemberCount) {
-          if (member.permissions.has('MANAGE_GUILD')) {
-            // assistant.log('--- Skipping moderator', username);
+          if (member.permissions.has(PermissionsBitField.Flags.ManageGuild)) {
             return;
           }
 
           // Skip Admin
-          if (member.permissions.has('ADMINISTRATOR')) {
-            // assistant.log('--- Skipping admin', username);
+          if (member.permissions.has(PermissionsBitField.Flags.Administrator)) {
             return;
           }
         }
