@@ -26,6 +26,13 @@ module.exports = {
       return;
     }
 
+    // Quit because disabled
+    if (true) {
+      assistant.log('Promotion is disabled');
+
+      return;
+    }
+
     // Log
     assistant.log(`🎉 Running promotion`);
 
