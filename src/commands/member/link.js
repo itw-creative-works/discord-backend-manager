@@ -15,61 +15,71 @@ module.exports = {
 
     // Retrieve Firebase account
     const account = await helpers.getFirebaseAccount(interaction.member.id);
-    const response = new EmbedBuilder();
+
+    const embeds = new EmbedBuilder()
+      .setColor(config.colors.blue)
+      .setTitle(`Link your ${Manager.config.brand.name} account`)
+      .setDescription(
+        `${config.emojis.mascot} **Hey, ${helpers.displayMember(interaction.member)}**, linking your account is easy! Follow the link and you will be guided through the process.\n\n`
+      )
+    const components = new ActionRowBuilder()
+      .addComponents(
+        new ButtonBuilder()
+          .setLabel('Link your Account')
+          .setStyle(ButtonStyle.Link)
+          .setURL(`${instance.app.url}/account/#connectedAccounts`)
+      )
 
     // Check if account is already linked
     if (account.auth.uid) {
-      response
-        .setColor(config.colors.green)
-        .setTitle(`Your ${Manager.config.brand.name} account is already linked`)
-        .setDescription(
-          `${config.emojis.mascot} Hey, **${helpers.displayMember(interaction.member)}**, you have already linked your ${Manager.config.brand.name} account with Discord.\n\n`
-          + `Type the ${helpers.displayCommand('account')} command for details.\n`
-        );
+      // Reply with the response embed
       return interaction.editReply({
         content: '',
-        embeds: [response]
+        embeds: [
+          new EmbedBuilder()
+            .setColor(config.colors.green)
+            .setTitle(`Your ${Manager.config.brand.name} account is already linked`)
+            .setDescription(
+              `${config.emojis.mascot} Hey, **${helpers.displayMember(interaction.member)}**, you have already linked your ${Manager.config.brand.name} account with Discord.\n\n`
+              + `Type the ${helpers.displayCommand('account')} command for details.\n`
+            )
+        ],
       });
     }
 
     // Try to send a DM for account linking
     try {
+      // Send the message
       await interaction.member.send({
-        embeds: [
-          new EmbedBuilder()
-          .setColor(config.colors.blue)
-          .setTitle(`Link your ${Manager.config.brand.name} account`)
-          .setDescription(
-            `${config.emojis.mascot} **Hey, ${helpers.displayMember(interaction.member)}**, linking your account is easy! Follow the link and you will be guided through the process.\n\n`
-          )
-        ],
-        components: [
-          new ActionRowBuilder().addComponents(
-            new ButtonBuilder()
-              .setLabel('Link your Account')
-              .setStyle(ButtonStyle.Link)
-              .setURL(`${instance.app.url}/account/#connectedAccounts`)
-          )
-        ]
+        embeds: [embeds],
+        components: [components],
       });
 
-      response
-        .setColor(config.colors.blue)
-        .setTitle(`Link your ${Manager.config.brand.name} account`)
-        .setDescription(`${config.emojis.mascot} Thanks, **${helpers.displayMember(interaction.member)}**, I have sent you a DM with instructions on how to link your ${Manager.config.brand.name} account to Discord!`);
-
+      // Edit reply
+      return interaction.editReply({
+        content: '',
+        embeds: [
+          new EmbedBuilder()
+            .setColor(config.colors.blue)
+            .setTitle(`Link your ${Manager.config.brand.name} account`)
+            .setDescription(`${config.emojis.mascot} Thanks, **${helpers.displayMember(interaction.member)}**, I have sent you a DM with instructions on how to link your ${Manager.config.brand.name} account to Discord!`)
+        ],
+      });
     } catch (e) {
       assistant.error('Failed to send account linking DM:', e);
-      response
-        .setColor(config.colors.red)
-        .setTitle('Linking failed')
-        .setDescription(`${config.emojis.mascot} Hey, **${helpers.displayMember(interaction.member)}**, please enable DMs so I can send you the ${Manager.config.brand.name} account linking guide.`);
-    }
 
-    // Reply with the response embed
-    return interaction.editReply({
-      content: '',
-      embeds: [response]
-    });
+      // Set response embed
+      // response
+      //   .setColor(config.colors.blue)
+      //   .setTitle('Linking failed')
+      //   .setDescription(`${config.emojis.mascot} Hey, **${helpers.displayMember(interaction.member)}**, please enable DMs so I can send you the ${Manager.config.brand.name} account linking guide.`);
+
+      // Reply with the response embed
+      return interaction.editReply({
+        content: '',
+        embeds: [embeds],
+        components: [components],
+      });
+    }
   },
 };
