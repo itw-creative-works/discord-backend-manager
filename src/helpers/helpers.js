@@ -393,15 +393,15 @@ Helpers.prototype.betaTesterStatus = function (member, account) {
 
   const timestamp = account?.betaTesterApplication?.applicationDate?.timestamp || new Date();
   const daysAppliedAgo = moment().diff(moment(timestamp), 'days', true);
-  // const daysUntilAnswer = Math.max(1, config.settings.betaApplicationAcceptanceDays - daysAppliedAgo);
+  // const daysUntilAnswer = Math.max(1, config.settings.beta.applicationAcceptanceDays - daysAppliedAgo);
 
   return {
     daysAppliedAgo: Math.floor(daysAppliedAgo),
     // daysUntilAnswer: daysUntilAnswer,
     applicationDate: new Date(timestamp).toISOString(),
     applicationAccepted: (
-      (roles.premium && daysAppliedAgo >= config.settings.betaApplicationAcceptanceDays.premium)
-      || (roles.active && daysAppliedAgo >= config.settings.betaApplicationAcceptanceDays.active)
+      (roles.premium && daysAppliedAgo >= config.settings.beta.applicationAcceptanceDays.premium)
+      || (roles.active && daysAppliedAgo >= config.settings.beta.applicationAcceptanceDays.active)
     ),
     applicationIsDayOld: daysAppliedAgo >= 1,
   }

@@ -80,16 +80,28 @@ module.exports = function (instance) {
       },
 
       // Beta
-      betaApplicationAcceptanceDays: {
-        premium: {
-          types: ['number'],
-          default: 0.3,
+      beta: {
+        applicationUrl: {
+          types: ['string'],
+          default: '',
           required: false,
         },
-        active: {
-          types: ['number'],
-          default: 6,
+        accountLinkRequired: {
+          types: ['boolean'],
+          default: true,
           required: false,
+        },
+        applicationAcceptanceDays: {
+          premium: {
+            types: ['number'],
+            default: 0.3,
+            required: false,
+          },
+          active: {
+            types: ['number'],
+            default: 6,
+            required: false,
+          },
         },
       },
 
