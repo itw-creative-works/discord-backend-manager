@@ -20,7 +20,7 @@ module.exports = {
       .setColor(config.colors.blue)
       .setTitle(`Link your ${Manager.config.brand.name} account`)
       .setDescription(
-        `${config.emojis.mascot} **Hey, ${helpers.displayMember(interaction.member)}**, linking your account is easy! Follow the link and you will be guided through the process.\n\n`
+        `${config.emojis.mascot} **Hey, ${helpers.displayMember(interaction.member)}**, linking your account is easy! Click the button below to start the process.\n\n`
       )
     const components = new ActionRowBuilder()
       .addComponents(
