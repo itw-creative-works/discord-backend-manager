@@ -1,9 +1,10 @@
-const { ContextMenuCommandBuilder, ApplicationCommandType, EmbedBuilder } = require('discord.js');
+const { ContextMenuCommandBuilder, ApplicationCommandType, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
 	data: new ContextMenuCommandBuilder()
 		.setName('Edit')
-		.setType(ApplicationCommandType.Message),
+		.setType(ApplicationCommandType.Message)
+		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 	settings: {
 		command: 'edit',
 	},
@@ -18,6 +19,6 @@ module.exports = {
 		const options = event.options;
 
     // Log
-		assistant.log('----context-menu/message/edit', options);
+		assistant.log('context-menu/message/edit', options);
 	},
 };

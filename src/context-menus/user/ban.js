@@ -1,9 +1,10 @@
-const { ContextMenuCommandBuilder, ApplicationCommandType, EmbedBuilder } = require('discord.js');
+const { ContextMenuCommandBuilder, ApplicationCommandType, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
 	data: new ContextMenuCommandBuilder()
 		.setName('Ban')
-		.setType(ApplicationCommandType.User),
+		.setType(ApplicationCommandType.User)
+		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 	settings: {
 		command: 'ban',
 	},
@@ -18,6 +19,6 @@ module.exports = {
 		const options = event.options;
 
     // Log
-		assistant.log('----context-menu/user/ban', options);
+		assistant.log('context-menu/user/ban', options);
 	},
 };

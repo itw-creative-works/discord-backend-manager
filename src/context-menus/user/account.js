@@ -1,4 +1,4 @@
-const { ContextMenuCommandBuilder, ApplicationCommandType, EmbedBuilder } = require('discord.js');
+const { ContextMenuCommandBuilder, ApplicationCommandType, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
 	data: new ContextMenuCommandBuilder()
@@ -18,6 +18,6 @@ module.exports = {
 		const options = event.options;
 
     // Log
-		assistant.log('----context-menu/user/account', options);
+		assistant.log('context-menu/user/account', options);
 	},
 };
