@@ -1,17 +1,21 @@
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, AuditLogEvent } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, AuditLogEvent } = require('discord.js');
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('audit')
-		.setDescription('Print an audit log')
-		.addUserOption(option => option.setName('user').setDescription('The user to lookup'))
-		.addStringOption(option => option.setName('type').setDescription('The event type to lookup'))
-		.addIntegerOption(option => option.setName('limit').setDescription('The number of events to fetch')),
+	data: [
+     new SlashCommandBuilder()
+      .setName('audit')
+      .setDescription('Print an audit log')
+      .addUserOption(option => option.setName('user').setDescription('The user to lookup'))
+      .addStringOption(option => option.setName('type').setDescription('The event type to lookup'))
+      .addIntegerOption(option => option.setName('limit').setDescription('The number of events to fetch'))
+  ],
 	options: {
 		user: {type: 'user', default: '$self'},
 		type: {type: 'string', default: undefined},
 		limit: {type: 'integer', default: 3},
 	},
+  settings: {
+  },
 	execute: async (instance, event) => {
     const Manager = instance.Manager;
     const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;

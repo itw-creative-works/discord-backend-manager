@@ -1,23 +1,26 @@
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, roleMention } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, roleMention } = require('discord.js');
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('rolemenu')
-		.setDescription('Setup role menu')
-		.addSubcommand(subcommand =>
-			subcommand
-				.setName('sync')
-				.setDescription('Sync the role menu with the channel')
-		)
-		// .addSubcommand(subcommand =>
-		// 	subcommand
-		// 		.setName('cancel')
-		// 		.setDescription('Cancel an existing giveawy')
-		// 		// .addStrinOption(option => option.setName('id').setDescription('The role to give').setRequired(true))
-		// )
-		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
-	options: {
+	data: [
+    new SlashCommandBuilder()
+      .setName('rolemenu')
+      .setDescription('Setup role menu')
+      .addSubcommand(subcommand =>
+        subcommand
+          .setName('sync')
+          .setDescription('Sync the role menu with the channel')
+      )
+      // .addSubcommand(subcommand =>
+      // 	subcommand
+      // 		.setName('cancel')
+      // 		.setDescription('Cancel an existing giveawy')
+      // 		// .addStrinOption(option => option.setName('id').setDescription('The role to give').setRequired(true))
+      // )
+  ],
+  options: {
 	},
+  settings: {
+  },
 	execute: async (instance, event) => {
     const Manager = instance.Manager;
     const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;

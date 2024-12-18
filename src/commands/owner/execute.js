@@ -1,14 +1,17 @@
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('execute')
-		.setDescription('Execute code')
-		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
-		.addStringOption(option => option.setName('code').setDescription('The code to execute').setRequired(true)),
-	options: {
+	data: [
+    new SlashCommandBuilder()
+      .setName('execute')
+      .setDescription('Execute code')
+      .addStringOption(option => option.setName('code').setDescription('The code to execute').setRequired(true))
+  ],
+  options: {
 		code: {type: 'string', default: undefined},
 	},
+  settings: {
+  },
 	execute: async (instance, event) => {
     const Manager = instance.Manager;
     const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;

@@ -1,14 +1,17 @@
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, Role } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, Role } = require('discord.js');
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('roleall')
-		.setDescription('Give a role to all members in the server')
-		.setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles)
-    .addRoleOption(option => option.setName('role').setDescription('Role to give to everyone').setRequired(true)),
-	options: {
+	data: [
+    new SlashCommandBuilder()
+      .setName('roleall')
+      .setDescription('Give a role to all members in the server')
+      .addRoleOption(option => option.setName('role').setDescription('Role to give to everyone').setRequired(true))
+  ],
+  options: {
 		role: {type: 'role', default: undefined},
 	},
+  settings: {
+  },
 	execute: async (instance, event) => {
     const Manager = instance.Manager;
     const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;

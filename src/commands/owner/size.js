@@ -1,15 +1,17 @@
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('size')
-		.setDescription('Get the size of any file or directory')
-		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
-    .addStringOption(option => option.setName('path').setDescription('The directory or file').setRequired(false))
-    ,
-	options: {
+	data: [
+    new SlashCommandBuilder()
+      .setName('size')
+      .setDescription('Get the size of any file or directory')
+      .addStringOption(option => option.setName('path').setDescription('The directory or file').setRequired(false))
+  ],
+  options: {
 		path: {type: 'string', default: './'},
 	},
+  settings: {
+  },
 	execute: async (instance, event) => {
     const Manager = instance.Manager;
     const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;

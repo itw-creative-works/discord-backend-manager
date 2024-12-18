@@ -1,18 +1,21 @@
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, roleMention, channelMention } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, roleMention, channelMention } = require('discord.js');
 
 /*
 	From: https://github.com/3chospirits/discord-music-bot/blob/a260d1eb43a974ea232c603c93b0e1f40647ae68/slash/play.js
 */
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('join')
-		.setDescription('Make the bot join a voice channel')
-		.addChannelOption(option => option.setName('channel').setDescription('The channel to join').setRequired(true))
-		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
-	options: {
+	data: [
+    new SlashCommandBuilder()
+      .setName('join')
+      .setDescription('Make the bot join a voice channel')
+      .addChannelOption(option => option.setName('channel').setDescription('The channel to join').setRequired(true))
+  ],
+  options: {
 		channel: {type: 'channel', default: undefined},
 	},
+  settings: {
+  },
 	execute: async (instance, event) => {
     const Manager = instance.Manager;
     const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;

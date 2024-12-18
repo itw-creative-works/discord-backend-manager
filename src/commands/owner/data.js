@@ -1,38 +1,41 @@
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('data')
-		.setDescription('Read or write data')
-		.addSubcommand(subcommand =>
-			subcommand
-				.setName('get')
-				.setDescription('Get data from the local storage')
-				.addStringOption(option => option.setName('path').setDescription(`Data path`).setRequired(true))
-		)
-		.addSubcommand(subcommand =>
-			subcommand
-				.setName('set')
-				.setDescription('Get data from the local storage')
-				.addStringOption(option => option.setName('path').setDescription(`Data path`).setRequired(true))
-				.addStringOption(option => option.setName('value').setDescription(`Data to save`).setRequired(true))
-        .addStringOption(option =>
-          option.setName('type')
-            .setDescription('The type of data')
-            .setRequired(false)
-            .addChoices(
-              { name: 'String', value: 'string' },
-              { name: 'Number', value: 'number' },
-              { name: 'Boolean', value: 'boolean' },
-              { name: 'Object', value: 'object' },
-            ))
-		)
-		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
-	options: {
+	data: [
+    new SlashCommandBuilder()
+      .setName('data')
+      .setDescription('Read or write data')
+      .addSubcommand(subcommand =>
+        subcommand
+          .setName('get')
+          .setDescription('Get data from the local storage')
+          .addStringOption(option => option.setName('path').setDescription(`Data path`).setRequired(true))
+      )
+      .addSubcommand(subcommand =>
+        subcommand
+          .setName('set')
+          .setDescription('Get data from the local storage')
+          .addStringOption(option => option.setName('path').setDescription(`Data path`).setRequired(true))
+          .addStringOption(option => option.setName('value').setDescription(`Data to save`).setRequired(true))
+          .addStringOption(option =>
+            option.setName('type')
+              .setDescription('The type of data')
+              .setRequired(false)
+              .addChoices(
+                { name: 'String', value: 'string' },
+                { name: 'Number', value: 'number' },
+                { name: 'Boolean', value: 'boolean' },
+                { name: 'Object', value: 'object' },
+              ))
+      )
+  ],
+  options: {
 		path: {type: 'string', default: undefined},
 		value: {type: 'string', default: undefined},
 		type: {type: 'string', default: undefined},
 	},
+  settings: {
+  },
 	execute: async (instance, event) => {
     const Manager = instance.Manager;
     const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;

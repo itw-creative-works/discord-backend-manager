@@ -1,16 +1,19 @@
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('premium')
-		.setDescription('Give a user a Premium subscription')
-		.addUserOption(option => option.setName('user').setDescription('The member to give the Premium subscription to').setRequired(true))
-		.addIntegerOption(option => option.setName('days').setDescription('The amount of days to give').setRequired(true))
-		.setDefaultMemberPermissions(PermissionFlagsBits.KickMembers | PermissionFlagsBits.BanMembers),
-	options: {
+	data: [
+    new SlashCommandBuilder()
+      .setName('premium')
+      .setDescription('Give a user a Premium subscription')
+      .addUserOption(option => option.setName('user').setDescription('The member to give the Premium subscription to').setRequired(true))
+      .addIntegerOption(option => option.setName('days').setDescription('The amount of days to give').setRequired(true))
+  ],
+  options: {
 		user: {type: 'user', default: undefined},
 		days: {type: 'integer', default: undefined},
 	},
+  settings: {
+  },
 	execute: async (instance, event) => {
     const Manager = instance.Manager;
     const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;

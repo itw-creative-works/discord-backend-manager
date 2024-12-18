@@ -1,12 +1,14 @@
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, GuildMember } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, GuildMember } = require('discord.js');
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('account')
-		.setDescription('View your App and Discord account details')
-		.addUserOption(option => option.setName('user').setDescription('The user to lookup'))
-		.addStringOption(option => option.setName('uid').setDescription('The uid to lookup')),
-	options: {
+	data: [
+    new SlashCommandBuilder()
+      .setName('account')
+      .setDescription('View your App and Discord account details')
+      .addUserOption(option => option.setName('user').setDescription('The user to lookup'))
+      .addStringOption(option => option.setName('uid').setDescription('The uid to lookup'))
+  ],
+  options: {
 		user: {type: 'user', default: '$self'},
 		uid: {type: 'string', default: undefined, for: 'user'},
 	},

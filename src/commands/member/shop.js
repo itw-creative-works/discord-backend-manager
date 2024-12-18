@@ -1,11 +1,13 @@
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, GuildMember } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, GuildMember } = require('discord.js');
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('shop')
-		.setDescription('View the shop and purchase items')
-		.addStringOption(option => option.setName('item').setDescription('The item to purchase')),
-	options: {
+	data: [
+    new SlashCommandBuilder()
+      .setName('shop')
+      .setDescription('View the shop and purchase items')
+      .addStringOption(option => option.setName('item').setDescription('The item to purchase'))
+  ],
+  options: {
 		item: {type: 'string', default: undefined},
 	},
 	settings: {

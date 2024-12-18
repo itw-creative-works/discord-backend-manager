@@ -1,13 +1,17 @@
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle, roleMention, channelMention } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle, roleMention, channelMention } = require('discord.js');
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('beta')
-		.setDescription('Apply to be a Beta Tester')
-		.addUserOption(option => option.setName('user').setDescription('The user to lookup')),
-	options: {
+	data: [
+    new SlashCommandBuilder()
+      .setName('beta')
+      .setDescription('Apply to be a Beta Tester')
+      .addUserOption(option => option.setName('user').setDescription('The user to lookup'))
+  ],
+  options: {
 		user: {type: 'user', default: '$self'},
 	},
+  settings: {
+  },
 	execute: async (instance, event) => {
 		const Manager = instance.Manager;
 		const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
@@ -143,7 +147,17 @@ module.exports = {
           new EmbedBuilder()
           .setColor(config.colors.blue)
           .setTitle('Beta Tester application under review')
-          .setDescription(`${config.emojis.betaTester} Hey, **${helpers.displayMember(options.user)}**, your **${Manager.config.brand.name} ${helpers.getPrettyRole('beta')}** application is currently under review!\n\nApplication Status:\n:pencil: **Applied**: ${new Date(betaTesterStatus.applicationDate).toLocaleDateString()} (${betaTesterStatus.daysAppliedAgo} days ago)\n${helpers.getPrettyRole('active')}: ${options.user.roles.cache.has(config.roles.active) ? 'Yes!' : 'No'}\n${helpers.getPrettyRole('premium')}: ${options.user.roles.cache.has(config.roles.premium) ? 'Yes!' : 'No'}\n\n*Note: your application will **only** be accepted if you are ${helpers.getPrettyRole('active')} or ${helpers.getPrettyRole('premium')}, which you can get by being active in the Discord server OR [${Manager.config.brand.name} Premium](${instance.app.url}/pricing)*.`)
+          .setDescription(''
+            + `${config.emojis.betaTester} Hey, **${helpers.displayMember(options.user)}**, your **${Manager.config.brand.name} ${helpers.getPrettyRole('beta')}** application is currently under review!`
+            + `\n`
+            + `\n**Application Status**:`
+            + `\n:pencil: Applied: ${new Date(betaTesterStatus.applicationDate).toLocaleDateString()} (${betaTesterStatus.daysAppliedAgo} days ago)`
+            + `\n${helpers.getPrettyRole('active')}: ${options.user.roles.cache.has(config.roles.active) ? 'Yes!' : 'No'}`
+            + `\n${helpers.getPrettyRole('premium')}: ${options.user.roles.cache.has(config.roles.premium) ? 'Yes!' : 'No'}`
+            + `\n`
+            + `\n*Note: your application will **only** be accepted if you are either ${helpers.getPrettyRole('active')} OR ${helpers.getPrettyRole('premium')}.`
+            + `\nYou can buy ${helpers.getPrettyRole('premium')} [here](${instance.app.url}/pricing) OR be active in the Discord server to earn ${helpers.getPrettyRole('active')} manually.`
+          )
         ],
       });
 		} else {

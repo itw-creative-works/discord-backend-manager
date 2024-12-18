@@ -1,12 +1,16 @@
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const os = require('os');
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('environment')
-		.setDescription('Log the current environment')
-		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
-	options: {
+	data: [
+    new SlashCommandBuilder()
+      .setName('environment')
+      .setDescription('Log the current environment')
+  ],
+  options: {
 	},
+  settings: {
+  },
 	execute: async (instance, event) => {
     const Manager = instance.Manager;
     const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;
@@ -18,7 +22,14 @@ module.exports = {
 		const options = event.options;
 
 		// assistant.log('Command', subcommand, options);
+    const user = os.userInfo();
 
-		return helpers.sendNormal(interaction, `**Environment:** \`${process.env.ENVIRONMENT}\``, {embed: true})
+    const string = `**Environment:**\n`
+      + `**env**: \`${process.env.ENVIRONMENT}\`\n`
+      + `**OS Type**: \`${os.type()}\`\n`
+      + `**OS User**: \`${user.username}\`\n`
+      + `**CWD**: \`${process.cwd()}\`\n`
+
+		return helpers.sendNormal(interaction, string, {embed: true})
 	},
 };

@@ -1,14 +1,17 @@
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, Collection } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, Collection } = require('discord.js');
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('subscription')
-		.setDescription('Display subscription details')
-		.addStringOption(option => option.setName('id').setDescription('Subscription ID or user ID').setRequired(true))
-		.setDefaultMemberPermissions(PermissionFlagsBits.KickMembers | PermissionFlagsBits.BanMembers),
-	options: {
+	data: [
+    new SlashCommandBuilder()
+      .setName('subscription')
+      .setDescription('Display subscription details')
+      .addStringOption(option => option.setName('id').setDescription('Subscription ID or user ID').setRequired(true))
+  ],
+  options: {
 		id: {type: 'string', default: undefined},
 	},
+  settings: {
+  },
 	execute: async (instance, event) => {
     const Manager = instance.Manager;
     const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;

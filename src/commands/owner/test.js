@@ -1,32 +1,30 @@
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, roleMention, channelMention } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, roleMention, channelMention } = require('discord.js');
 
 /*
 	/test one user:@ianwieds#0001 uid:exzY8mmSnGVcrQvA4OvqMJas3d72 role:@Moderator channel:#📃guidelines mentionable:@Administrator string:test number:1.2 integer:1 boolean:False
 */
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('test')
-		.setDescription('Test commands')
-		.addSubcommand(subcommand =>
-			subcommand
-				.setName('one')
-				.setDescription('one')
-				.addUserOption(option => option.setName('user').setDescription('user'))
-				.addStringOption(option => option.setName('uid').setDescription('uid'))
-				.addRoleOption(option => option.setName('role').setDescription('role'))
-				.addChannelOption(option => option.setName('channel').setDescription('channel'))
-				.addMentionableOption(option => option.setName('mentionable').setDescription('mentionable'))
-				.addStringOption(option => option.setName('string').setDescription('string'))
-				.addNumberOption(option => option.setName('number').setDescription('number'))
-				.addIntegerOption(option => option.setName('integer').setDescription('integer'))
-				.addBooleanOption(option => option.setName('boolean').setDescription('boolean'))
-		)
-		// .addSubcommand(subcommand =>
-		// 	subcommand
-		// )
-		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
-	options: {
+	data: [
+    new SlashCommandBuilder()
+      .setName('test')
+      .setDescription('Test commands')
+      .addSubcommand(subcommand =>
+        subcommand
+          .setName('one')
+          .setDescription('one')
+          .addUserOption(option => option.setName('user').setDescription('user'))
+          .addStringOption(option => option.setName('uid').setDescription('uid'))
+          .addRoleOption(option => option.setName('role').setDescription('role'))
+          .addChannelOption(option => option.setName('channel').setDescription('channel'))
+          .addMentionableOption(option => option.setName('mentionable').setDescription('mentionable'))
+          .addStringOption(option => option.setName('string').setDescription('string'))
+          .addNumberOption(option => option.setName('number').setDescription('number'))
+          .addIntegerOption(option => option.setName('integer').setDescription('integer'))
+          .addBooleanOption(option => option.setName('boolean').setDescription('boolean'))
+		),
+  ],
+  options: {
 		user: {type: 'user', default: undefined},
 		uid: {type: 'uid', default: undefined, for: 'user'},
 		role: {type: 'role', default: undefined},
@@ -48,6 +46,8 @@ module.exports = {
 	// 	integer: {type: 'integer', default: 1.5},
 	// 	boolean: {type: 'boolean', default: false},
 	// },
+  settings: {
+  },
 	execute: async (instance, event) => {
     const Manager = instance.Manager;
     const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;

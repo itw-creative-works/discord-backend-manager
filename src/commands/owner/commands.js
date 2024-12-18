@@ -1,28 +1,31 @@
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('commands')
-		.setDescription('Enable or disable server commands')
-		.addStringOption((option) =>
-			option.setName('status')
-				.setDescription('The status of commands')
-				.setRequired(true)
-				.addChoices(
-					{
-						name: 'Enabled',
-						value: 'enabled'
-					},
-					{
-						name: 'Disabled',
-						value: 'disabled'
-					}
-				)
-			)
-		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
-	options: {
+	data: [
+    new SlashCommandBuilder()
+      .setName('commands')
+      .setDescription('Enable or disable server commands')
+      .addStringOption((option) =>
+        option.setName('status')
+          .setDescription('The status of commands')
+          .setRequired(true)
+          .addChoices(
+            {
+              name: 'Enabled',
+              value: 'enabled'
+            },
+            {
+              name: 'Disabled',
+              value: 'disabled'
+            }
+          )
+      )
+  ],
+  options: {
 		status: {type: 'string', default: undefined},
 	},
+  settings: {
+  },
 	execute: async (instance, event) => {
     const Manager = instance.Manager;
     const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;

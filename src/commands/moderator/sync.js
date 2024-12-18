@@ -1,14 +1,17 @@
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('sync')
-		.setDescription('Sync Premium subscription with payment processors')
-		.addUserOption(option => option.setName('user').setDescription('The member to sync').setRequired(true))
-		.setDefaultMemberPermissions(PermissionFlagsBits.KickMembers | PermissionFlagsBits.BanMembers),
-	options: {
+	data: [
+    new SlashCommandBuilder()
+      .setName('sync')
+      .setDescription('Sync Premium subscription with payment processors')
+      .addUserOption(option => option.setName('user').setDescription('The member to sync').setRequired(true))
+  ],
+  options: {
 		user: {type: 'user', default: undefined},
 	},
+  settings: {
+  },
 	execute: async (instance, event) => {
     const Manager = instance.Manager;
     const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;

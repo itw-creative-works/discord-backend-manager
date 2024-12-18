@@ -1,41 +1,42 @@
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, MessagePayload } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, MessagePayload } = require('discord.js');
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('giveaway')
-		.setDescription('Manage giveaways')
-		.addSubcommand(subcommand =>
-			subcommand
-				.setName('create')
-				.setDescription('Create a new giveaway')
-				.addNumberOption(option => option.setName('days').setDescription('Duration in days').setRequired(true))
-				// .addStringOption(option => option.setName('prize').setDescription('Name of the prize').setRequired(true))
-        .addStringOption(option =>
-          option.setName('prize')
-            .setDescription('The type of prize')
-            .setRequired(true)
-            .addChoices(
-              { name: 'Premium Subscription', value: 'Premium Subscription' },
-              { name: 'Discord Nitro', value: 'Discord Nitro' },
-            ))
-				.addRoleOption(option => option.setName('role').setDescription('Role required to win').setRequired(false))
-				.addUserOption(option => option.setName('sponsor').setDescription('Giveaway sponsor').setRequired(false))
-				.addStringOption(option => option.setName('sponsor-link').setDescription(`Giveaway sponsor's link`).setRequired(false))
-				.addStringOption(option => option.setName('requirement').setDescription(`Requirement to enter`).setRequired(false))
-				.addStringOption(option => option.setName('reason').setDescription(`Reason for the giveaway`).setRequired(false))
-		)
-		.addSubcommand(subcommand =>
-			subcommand
-				.setName('cancel')
-				.setDescription('Cancel an existing giveawy')
-		)
-		.addSubcommand(subcommand =>
-			subcommand
-				.setName('refresh')
-				.setDescription('Refresh an existing giveawy')
-		)
-		.setDefaultMemberPermissions(PermissionFlagsBits.KickMembers | PermissionFlagsBits.BanMembers),
-	options: {
+	data: [
+    new SlashCommandBuilder()
+      .setName('giveaway')
+      .setDescription('Manage giveaways')
+      .addSubcommand(subcommand =>
+        subcommand
+          .setName('create')
+          .setDescription('Create a new giveaway')
+          .addNumberOption(option => option.setName('days').setDescription('Duration in days').setRequired(true))
+          // .addStringOption(option => option.setName('prize').setDescription('Name of the prize').setRequired(true))
+          .addStringOption(option =>
+            option.setName('prize')
+              .setDescription('The type of prize')
+              .setRequired(true)
+              .addChoices(
+                { name: 'Premium Subscription', value: 'Premium Subscription' },
+                { name: 'Discord Nitro', value: 'Discord Nitro' },
+              ))
+          .addRoleOption(option => option.setName('role').setDescription('Role required to win').setRequired(false))
+          .addUserOption(option => option.setName('sponsor').setDescription('Giveaway sponsor').setRequired(false))
+          .addStringOption(option => option.setName('sponsor-link').setDescription(`Giveaway sponsor's link`).setRequired(false))
+          .addStringOption(option => option.setName('requirement').setDescription(`Requirement to enter`).setRequired(false))
+          .addStringOption(option => option.setName('reason').setDescription(`Reason for the giveaway`).setRequired(false))
+      )
+      .addSubcommand(subcommand =>
+        subcommand
+          .setName('cancel')
+          .setDescription('Cancel an existing giveawy')
+      )
+      .addSubcommand(subcommand =>
+        subcommand
+          .setName('refresh')
+          .setDescription('Refresh an existing giveawy')
+      )
+  ],
+  options: {
 		days: {type: 'number', default: undefined},
 		prize: {type: 'string', default: undefined},
 		role: {type: 'role', default: undefined},
@@ -44,6 +45,8 @@ module.exports = {
 		requirement: {type: 'string', default: undefined},
 		reason: {type: 'string', default: undefined},
 	},
+  settings: {
+  },
 	execute: async (instance, event) => {
     const Manager = instance.Manager;
     const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;

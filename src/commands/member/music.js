@@ -1,24 +1,27 @@
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('music')
-		.setDescription('Listen to music from YouTube')
-		.addSubcommand(subcommand =>
-			subcommand
-				.setName('play')
-				.setDescription('Listen to music from YouTube')
-				.addStringOption(option => option.setName('song').setDescription('The YouTube link to play or search for').setRequired(true))
-		)
-		.addSubcommand(subcommand =>
-			subcommand
-				.setName('queue')
-				.setDescription('Display the song queue')
-		)
-		,
-	options: {
+	data: [
+    new SlashCommandBuilder()
+      .setName('music')
+      .setDescription('Listen to music from YouTube')
+      .addSubcommand(subcommand =>
+        subcommand
+          .setName('play')
+          .setDescription('Listen to music from YouTube')
+          .addStringOption(option => option.setName('song').setDescription('The YouTube link to play or search for').setRequired(true))
+      )
+      .addSubcommand(subcommand =>
+        subcommand
+          .setName('queue')
+          .setDescription('Display the song queue')
+      )
+  ],
+  options: {
 		song: {type: 'string', default: undefined},
 	},
+  settings: {
+  },
 	execute: async (instance, event) => {
     const Manager = instance.Manager;
     const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;

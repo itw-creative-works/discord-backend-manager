@@ -1,34 +1,36 @@
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('ban')
-		.setDescription('Select a member and ban them')
-		.setDefaultMemberPermissions(PermissionFlagsBits.KickMembers | PermissionFlagsBits.BanMembers)
-		.addSubcommand(subcommand =>
-			subcommand
-				.setName('user')
-				.setDescription('Ban by user mention')
-				.addUserOption(option => option.setName('user').setDescription('The member to ban').setRequired(true))
-				.addStringOption(option => option.setName('reason').setDescription('The reason for the ban').setRequired(true))
-		)
-		.addSubcommand(subcommand =>
-			subcommand
-				.setName('id')
-				.setDescription('Ban by user ID')
-				.addStringOption(option => option.setName('id').setDescription('The member to ban').setRequired(true))
-				.addStringOption(option => option.setName('reason').setDescription('The reason for the ban').setRequired(true))
-		),
-		// .setName('ban')
-		// .setDescription('Select a member and ban them')
-		// .addUserOption(option => option.setName('user').setDescription('The member to ban').setRequired(true))
-		// .addStringOption(option => option.setName('reason').setDescription('The reason for the ban').setRequired(true))
-		// .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers | PermissionFlagsBits.BanMembers),
-	options: {
+	data: [
+    new SlashCommandBuilder()
+      .setName('ban')
+      .setDescription('Select a member and ban them')
+      .addSubcommand(subcommand =>
+        subcommand
+          .setName('user')
+          .setDescription('Ban by user mention')
+          .addUserOption(option => option.setName('user').setDescription('The member to ban').setRequired(true))
+          .addStringOption(option => option.setName('reason').setDescription('The reason for the ban').setRequired(true))
+      )
+      .addSubcommand(subcommand =>
+        subcommand
+          .setName('id')
+          .setDescription('Ban by user ID')
+          .addStringOption(option => option.setName('id').setDescription('The member to ban').setRequired(true))
+          .addStringOption(option => option.setName('reason').setDescription('The reason for the ban').setRequired(true))
+      ),
+      // .setName('ban')
+      // .setDescription('Select a member and ban them')
+      // .addUserOption(option => option.setName('user').setDescription('The member to ban').setRequired(true))
+      // .addStringOption(option => option.setName('reason').setDescription('The reason for the ban').setRequired(true))
+  ],
+  options: {
 		user: {type: 'user', default: undefined},
 		id: {type: 'string', default: undefined},
 		reason: {type: 'string', default: undefined},
 	},
+  settings: {
+  },
 	execute: async (instance, event) => {
     const Manager = instance.Manager;
     const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;

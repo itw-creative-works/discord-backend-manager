@@ -1,4 +1,4 @@
-const { Client, GatewayIntentBits, Partials, Routes, Collection, ActivityType, channelMention, REST } = require('discord.js');
+const { Client, GatewayIntentBits, Partials, Routes, Collection, ActivityType, channelMention, REST, PermissionFlagsBits } = require('discord.js');
 const { joinVoiceChannel } = require('@discordjs/voice');
 // const { DiscordTogether } = require('discord-together');
 
@@ -21,6 +21,14 @@ const fetch = Manager.require('wonderful-fetch');
 const powertools = Manager.require('node-powertools');
 const { get, set, merge } = Manager.require('lodash');
 const path = require('path');
+
+// Configure dotenv
+dotenv.config();
+
+// Constants
+const OWNER_PERM = /\/owner\//;
+const ADMIN_PERM = /\/admin\//;
+const MOD_PERM = /\/moderator\//;
 
 function DiscordManager() {
   const self = this;
@@ -118,8 +126,9 @@ DiscordManager.prototype.login = async function (file, attempts) {
 
   // Create variables
   const assistant = Manager.Assistant({}, {functionName: name});
-  let DISCORD_TOKEN = null;
   const maxAttempts = attempts || 3;
+  let DISCORD_TOKEN;
+  let ENABLED;
 
   // Setup prefix
   // assistant.setLogPrefix(`${name}`);
@@ -128,8 +137,14 @@ DiscordManager.prototype.login = async function (file, attempts) {
   try {
     const env = dotenv.config({path: path.resolve(projectPath, '.env')});
     DISCORD_TOKEN = env.parsed.DISCORD_TOKEN;
+    ENABLED = env.parsed.ENABLED;
   } catch (e) {
     assistant.error(new Error(`Failed to set up environment variables from .env file: ${e.message}`));
+  }
+
+  // Quit if not enabled
+  if (ENABLED === 'false') {
+    return assistant.warn(`Server ${name} is not enabled. Exiting...`);
   }
 
   // Set up client
@@ -213,15 +228,19 @@ DiscordManager.prototype.login = async function (file, attempts) {
     await iterate(`commands/**/*.js`, projectPath, {instance: instance})
     .then(async (files) => {
       files.forEach(file => {
-        const command = require(file.path);
+        const item = loadCommand(assistant, file.path);
 
         // Register command
-        set(Manager, `discord.commands.${command.data.name}`, command);
+        set(Manager, `discord.commands.${item.data.name}`, item);
+
+        // Ensure admin and moderator commands have proper permissions
+        resolveCommand(item, file.path);
 
         // Register command
-        commandsJSON.push(command.data.toJSON())
+        commandsJSON.push(item.data.toJSON());
 
-        // assistant.log('Registered command for', command.data.name);
+        // Log
+        // assistant.log('Registered command for', file.name, command.data.name);
       });
     })
 
@@ -229,16 +248,26 @@ DiscordManager.prototype.login = async function (file, attempts) {
     await iterate(`context-menus/**/*.js`, projectPath, {instance: instance})
     .then(async (files) => {
       files.forEach(file => {
-        const menu = require(file.path);
+        const item = loadCommand(assistant, file.path);
 
         // Register context menu
-        set(Manager, `discord.contextMenus.${file.name}`, menu);
-        commandsJSON.push(menu.data.toJSON())
+        set(Manager, `discord.contextMenus.${file.name}`, item);
 
-        // assistant.log('Registered context-menu for', file.name, menu);
+        // Ensure admin and moderator commands have proper permissions
+        resolveCommand(item, file.path);
+
+        // Register context menu
+        commandsJSON.push(item.data.toJSON());
+
+        // assistant.log('Registered context-menu for', file.name, item);
       });
     })
 
+
+    // commandsJSON.forEach((command) => {
+    //   // console
+    //   console.log('---command.name', name, command.name);
+    // })
 
     // Initiate processes
     await iterate(`processes/**/*.js`, projectPath, {instance: instance})
@@ -280,6 +309,7 @@ DiscordManager.prototype.login = async function (file, attempts) {
 
     // Publish commands
     await rest.put(Routes.applicationCommands(client.user.id), { body: commandsJSON })
+    // await rest.put(Routes.applicationCommands(client.user.id), { body: {} })
       .then((r) => {
         assistant.log(`💿 Successfully published all commands!`);
         Manager.discord.publishedCommands = r;
@@ -459,6 +489,36 @@ function iterate(pattern, customDir, options) {
     // Return the result
     return resolve(result);
   });
+}
+
+function resolveCommand(command, filePath) {
+  if (filePath.match(OWNER_PERM)) {
+    command.data.setDefaultMemberPermissions(PermissionFlagsBits.Administrator);
+    command.permission = 'owner';
+  } else if (filePath.match(ADMIN_PERM)) {
+    command.data.setDefaultMemberPermissions(PermissionFlagsBits.Administrator);
+    command.permission = 'admin';
+  } else if (filePath.match(MOD_PERM)) {
+    command.data.setDefaultMemberPermissions(PermissionFlagsBits.KickMembers | PermissionFlagsBits.BanMembers);
+    command.permission = 'moderator';
+  } else {
+    command.permission = 'member';
+  }
+}
+
+function loadCommand(assistant, filePath) {
+  const command = require(filePath);
+
+  // Get the first index
+  // assistant.log('---item', filePath, typeof command.data, typeof command.data[0]);
+  // assistant.log('---command.data', command.data);
+
+  // Get the first index
+  // THIS SHIT IS WACK DONT CHAGNE IT (SWEAR TO FUCKING GOD THE LAST COMMAND FILE NO MATTER WHAT IT IS WILL BREAK)
+  // EVEYR OTHER FILE IS A PROPER ARRAY EXCEPT THE LAST FILE, DOESNT MATTER WHAT FILE IT IS LMAOOO
+  command.data = command.data[0] || command.data;
+
+  return command;
 }
 
 module.exports = DiscordManager;

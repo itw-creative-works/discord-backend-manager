@@ -1,16 +1,19 @@
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('event')
-		.setDescription('Test an event')
-		.addStringOption(option => option.setName('event').setDescription('The event name').setRequired(true))
-		.addStringOption(option => option.setName('path').setDescription('The path to the object').setRequired(true))
-		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
-	options: {
+	data: [
+    new SlashCommandBuilder()
+      .setName('event')
+      .setDescription('Test an event')
+      .addStringOption(option => option.setName('event').setDescription('The event name').setRequired(true))
+      .addStringOption(option => option.setName('path').setDescription('The path to the object').setRequired(true))
+  ],
+  options: {
 		event: {type: 'string', default: undefined},
 		path: {type: 'string', default: undefined},
 	},
+  settings: {
+  },
 	execute: async (instance, event) => {
     const Manager = instance.Manager;
     const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;

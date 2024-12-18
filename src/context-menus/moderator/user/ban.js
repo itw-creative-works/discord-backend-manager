@@ -1,11 +1,15 @@
-const { ContextMenuCommandBuilder, ApplicationCommandType, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
+const { ContextMenuCommandBuilder, ApplicationCommandType, EmbedBuilder } = require('discord.js');
 
 module.exports = {
-	data: new ContextMenuCommandBuilder()
-		.setName('Account')
-		.setType(ApplicationCommandType.User),
+	data: [
+    new ContextMenuCommandBuilder()
+      .setName('Ban')
+      .setType(ApplicationCommandType.User)
+  ],
+  options: {
+  },
 	settings: {
-		command: 'account',
+		command: 'ban',
 	},
 	execute: async (instance, event) => {
     const Manager = instance.Manager;
@@ -18,6 +22,6 @@ module.exports = {
 		const options = event.options;
 
     // Log
-		assistant.log('context-menu/user/account', options);
+		assistant.log('context-menu/user/ban', options);
 	},
 };

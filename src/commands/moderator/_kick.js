@@ -1,16 +1,19 @@
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('kick')
-		.setDescription('Select a member and kick them (but not really)')
-		.addUserOption(option => option.setName('user').setDescription('The member to ban').setRequired(true))
-		.addStringOption(option => option.setName('reason').setDescription('The reason for the ban').setRequired(true))
-		.setDefaultMemberPermissions(PermissionFlagsBits.KickMembers | PermissionFlagsBits.BanMembers),
-	options: {
+	data: [
+    new SlashCommandBuilder()
+      .setName('kick')
+      .setDescription('Select a member and kick them (but not really)')
+      .addUserOption(option => option.setName('user').setDescription('The member to ban').setRequired(true))
+      .addStringOption(option => option.setName('reason').setDescription('The reason for the ban').setRequired(true))
+  ],
+  options: {
 		user: {type: 'user', default: undefined},
 		reason: {type: 'string', default: undefined},
 	},
+  settings: {
+  },
 	execute: async (instance, event) => {
     const Manager = instance.Manager;
     const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;

@@ -1,10 +1,15 @@
 const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle } = require('discord.js');
 
 module.exports = {
-  data: new SlashCommandBuilder()
-    .setName('link')
-    .setDescription('Link your account to Discord'),
-  options: {},
+  data: [
+    new SlashCommandBuilder()
+      .setName('link')
+      .setDescription('Link your account to Discord')
+  ],
+  options: {
+  },
+  settings: {
+  },
   execute: async (instance, event) => {
     const Manager = instance.Manager;
     const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;

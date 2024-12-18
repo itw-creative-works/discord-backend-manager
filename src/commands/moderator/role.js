@@ -1,28 +1,31 @@
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, Role } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, Role } = require('discord.js');
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('role')
-		.setDescription('Change the role of a user')
-		.addSubcommand(subcommand =>
-			subcommand
-				.setName('add')
-				.setDescription('Give a role to a member')
-				.addUserOption(option => option.setName('user').setDescription('The member to give the role to').setRequired(true))
-				.addRoleOption(option => option.setName('role').setDescription('The role to give').setRequired(true))
-		)
-		.addSubcommand(subcommand =>
-			subcommand
-				.setName('remove')
-				.setDescription('Remove a role from a member')
-				.addUserOption(option => option.setName('user').setDescription('The member to remove the role from').setRequired(true))
-				.addRoleOption(option => option.setName('role').setDescription('The role to remove').setRequired(true))
-		)
-		.setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles),
-	options: {
+	data: [
+    new SlashCommandBuilder()
+      .setName('role')
+      .setDescription('Change the role of a user')
+      .addSubcommand(subcommand =>
+        subcommand
+          .setName('add')
+          .setDescription('Give a role to a member')
+          .addUserOption(option => option.setName('user').setDescription('The member to give the role to').setRequired(true))
+          .addRoleOption(option => option.setName('role').setDescription('The role to give').setRequired(true))
+      )
+      .addSubcommand(subcommand =>
+        subcommand
+          .setName('remove')
+          .setDescription('Remove a role from a member')
+          .addUserOption(option => option.setName('user').setDescription('The member to remove the role from').setRequired(true))
+          .addRoleOption(option => option.setName('role').setDescription('The role to remove').setRequired(true))
+      )
+  ],
+  options: {
 		user: {type: 'user', default: undefined},
 		role: {type: 'role', default: undefined},
 	},
+  settings: {
+  },
 	execute: async (instance, event) => {
     const Manager = instance.Manager;
     const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;

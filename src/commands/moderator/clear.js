@@ -1,16 +1,19 @@
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, MessagePayload } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, MessagePayload } = require('discord.js');
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('clear')
-		.setDescription('Delete a channel\'s messages')
-		.addIntegerOption(option => option.setName('amount').setDescription('Number of messages to delete').setRequired(false))
-		.addUserOption(option => option.setName('user').setDescription('Specific @member messages').setRequired(false))
-		.setDefaultMemberPermissions(PermissionFlagsBits.KickMembers | PermissionFlagsBits.BanMembers),
-	options: {
+	data: [
+    new SlashCommandBuilder()
+      .setName('clear')
+      .setDescription('Delete a channel\'s messages')
+      .addIntegerOption(option => option.setName('amount').setDescription('Number of messages to delete').setRequired(false))
+      .addUserOption(option => option.setName('user').setDescription('Specific @member messages').setRequired(false))
+  ],
+  options: {
 		amount: {type: 'integer', default: 1},
 		user: {type: 'user', default: undefined},
 	},
+  settings: {
+  },
 	execute: async (instance, event) => {
     const Manager = instance.Manager;
     const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;

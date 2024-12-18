@@ -1,34 +1,38 @@
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('support')
-		.setDescription('Get help with any of our custom Discord bot commands'),
-		// .addStringOption((option) =>
-		// 	option.setName('catgory')
-		// 		.setDescription('The category of commands to list')
-		// 		.addChoices(
-		// 			{
-		// 				name: 'Member',
-		// 				value: 'member'
-		// 			},
-		// 			{
-		// 				name: 'Admin',
-		// 				value: 'admin'
-		// 			},
-		// 			{
-		// 				name: 'Moderator',
-		// 				value: 'moderator'
-		// 			},
-		// 			{
-		// 				name: 'Owner',
-		// 				value: 'owner'
-		// 			}
-		// 		)
-		// 	),
-	options: {
+	data: [
+    new SlashCommandBuilder()
+      .setName('support')
+      .setDescription('Get help with any of our custom Discord bot commands')
+      // .addStringOption((option) =>
+      // 	option.setName('catgory')
+      // 		.setDescription('The category of commands to list')
+      // 		.addChoices(
+      // 			{
+      // 				name: 'Member',
+      // 				value: 'member'
+      // 			},
+      // 			{
+      // 				name: 'Admin',
+      // 				value: 'admin'
+      // 			},
+      // 			{
+      // 				name: 'Moderator',
+      // 				value: 'moderator'
+      // 			},
+      // 			{
+      // 				name: 'Owner',
+      // 				value: 'owner'
+      // 			}
+      // 		)
+      // 	)
+  ],
+  options: {
 		category: {type: 'string', default: undefined}
 	},
+  settings: {
+  },
 	execute: async (instance, event) => {
     const Manager = instance.Manager;
     const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;

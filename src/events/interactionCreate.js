@@ -24,13 +24,12 @@ module.exports = async function (instance, interaction) {
   const isDirectMessage = (interaction?.guild?.id || '-1') === '-1';
   const isInCommandsChannel = (interaction?.channel?.id || '-1') === config.channels.chat.commands;
   const isPrivelagedMember = helpers.isPrivelagedMember(interaction.member);
-  const isOwnerCommand = __dirname.includes('owner')
 
   const command = commands[interaction.commandName];
   const blockCommand = !Manager.discord.options.enableCommands;
 
   // Log
-  assistant.log(`[Command] ${interaction?.member?.user?.username}: /${interaction.commandName} ==> exists=${!!command}, blocked=${!!blockCommand}`);
+  assistant.log(`[Command] ${interaction?.member?.user?.username}: /${interaction.commandName} ==> permission=${command?.permission}, exists=${!!command}, blocked=${!!blockCommand}`);
 
   // Check for blocking
   if (blockCommand) { return };
@@ -50,6 +49,12 @@ module.exports = async function (instance, interaction) {
   // Get the Discord profile
   const discordProfile = await profile.get(interaction?.member?.id);
 
+  // console.log('---__dirname', __dirname);
+  // console.log('---isChatInputCommand', isChatInputCommand);
+  // console.log('---isOfficialServer', isOfficialServer);
+  // console.log('---command.permission', command.permission);
+  // console.log('---process.env.OWNER_ID', process.env.OWNER_ID);
+
   // COMMAND TYPES
   if (isChatInputCommand) {
     // // Check for blocking
@@ -62,7 +67,8 @@ module.exports = async function (instance, interaction) {
         return helpers.sendError(interaction, `Please use commands in the ${channelMention(config.channels.chat.commands)} channel.`, {embed: false})
       }
     } else {
-      if (isOwnerCommand) {
+      // if (isOwnerCommand && interaction?.guild?.id !== 'process.env.OWNER_ID') {
+      if (command.permission === 'owner' && interaction?.member?.id !== process.env.OWNER_ID) {
         return helpers.sendError(interaction, `This is a restricted command`, {embed: false})
       }
     }
