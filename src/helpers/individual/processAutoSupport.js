@@ -1,4 +1,4 @@
-const { EmbedBuilder, userMention, roleMention, channelMention } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, userMention, roleMention, channelMention } = require('discord.js');
 
 module.exports = function (instance, member, message, messages) {
   const Manager = instance.Manager;
@@ -60,6 +60,36 @@ module.exports = function (instance, member, message, messages) {
     ) {
       assistant.log('Backing out because user has reached the daily message limit');
 
+      // Get exempt roles
+      const exemptRolesText = '';
+      const components = [];
+
+      // Check if user has any of the exempt roles
+      config.main.support.exemptRoles.forEach((role) => {
+        exemptRolesText += `${helpers.getPrettyRole(role)}\n`;
+
+        // Check for action button role
+        if (role === 'booster') {
+          components.push(
+            new ActionRowBuilder().addComponents(
+              new ButtonBuilder()
+                .setLabel('Become a Booster')
+                .setStyle(ButtonStyle.Primary)
+                .setURL('https://discord.com/nitro')
+            )
+          )
+        } else if (role === 'premium') {
+          components.push(
+            new ActionRowBuilder().addComponents(
+              new ButtonBuilder()
+                .setLabel(`Get ${instance.app.name} Premium`)
+                .setStyle(ButtonStyle.Success)
+                .setURL(`${instance.app.url}/pricing`)
+            )
+          )
+        }
+      });
+
       // Send ephemeral error
       await message.reply({
         embeds: [
@@ -70,10 +100,11 @@ module.exports = function (instance, member, message, messages) {
               + `\n`
               + `You can ask **unlimited questions** if you have any of the following roles:\n`
               // + `${resolvedRoles.map(role => helpers.getPrettyRole(role)).join('\n')}\n`
-              + `${config.main.support.exemptRoles.map(role => helpers.getPrettyRole(role)).join('\n')}\n`
+              + `${exemptRolesText}\n`
               + `\n`
             )
-        ]
+        ],
+        components: components,
       })
 
       return

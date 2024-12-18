@@ -21,7 +21,6 @@ module.exports = {
 		const account = await helpers.getFirebaseAccount(options.user.id);
 
 		// Check if account is linked
-    console.log('---config.settings.beta.accountLinkRequired', config.settings.beta.accountLinkRequired);
 		if (config.settings.beta.accountLinkRequired && !account.auth.uid) {
 		  return interaction.editReply({
         content: '',
