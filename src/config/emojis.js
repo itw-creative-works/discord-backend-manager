@@ -7,7 +7,7 @@ module.exports = function (instance) {
         Server-specific
       */
       // General
-      mascot: {
+      logo: {
         types: ['string'],
         default: '<:somiibo:748065274799980684>',
         required: true,

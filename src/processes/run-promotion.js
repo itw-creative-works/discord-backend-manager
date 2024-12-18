@@ -143,7 +143,7 @@ module.exports = {
       // Send message
       member.send({
         content: ``
-          + `Hi, **${member}**, we want to invite you to to the ${config.emojis.mascot} **${Manager.config.brand.name} Discord server**! ${config.emojis.mascot}\n`
+          + `Hi, **${member}**, we want to invite you to to the ${config.emojis.logo} **${Manager.config.brand.name} Discord server**! ${config.emojis.logo}\n`
           + `\n`
           + `**${Manager.config.brand.name}** is not just *another* Discord server. We have:\n`
           + `  ${config.messages.welcome.private.bullets.join(' \n  ')}\n`

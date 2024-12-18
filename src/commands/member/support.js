@@ -47,7 +47,7 @@ module.exports = {
 
 		const response = new EmbedBuilder()
 			.setColor(config.colors.green)
-		let description = `**${config.emojis.mascot} ${Manager.config.brand.name} Commands ${config.emojis.mascot}**\n\n`;
+		let description = `**${config.emojis.logo} ${Manager.config.brand.name} Commands ${config.emojis.logo}**\n\n`;
 
 		// assistant.log('---commands', commands);
 		Object.keys(commands)

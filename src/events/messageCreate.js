@@ -73,7 +73,7 @@ module.exports = async function (instance, message) {
     // Otherwise, send them a message to bring them to the server
     await message.reply({
       content: (``
-        + `Hi, **${member}**. I am unable to assist you over DM—please join our ${config.emojis.mascot} **${Manager.config.brand.name} Discord Server**! ${config.emojis.mascot} \n`
+        + `Hi, **${member}**. I am unable to assist you over DM—please join our ${config.emojis.logo} **${Manager.config.brand.name} Discord Server**! ${config.emojis.logo} \n`
         + `\n`
         + `**Do you need help?**\n`
         + `Post your question in our support channel: ${support} \n`

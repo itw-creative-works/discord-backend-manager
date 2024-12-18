@@ -61,7 +61,7 @@ Route.prototype.main = async function (assistant) {
           new EmbedBuilder()
             .setColor(config.colors.green)
             .setTitle(`${Manager.config.brand.name} account linked`)
-            .setDescription(`${config.emojis.mascot} **Hey, ${helpers.displayMember(member)}**, you have successfully linked your **${Manager.config.brand.name}** account to Discord.`)
+            .setDescription(`${config.emojis.logo} **Hey, ${helpers.displayMember(member)}**, you have successfully linked your **${Manager.config.brand.name}** account to Discord.`)
         ]
     })
   }
@@ -117,7 +117,7 @@ module.exports = Route;
 //               .setColor(config.colors.green)
 //               .setTitle(`${Manager.config.brand.name} account linked`)
 //               .setDescription(``
-//                 + `${config.emojis.mascot} **Hey, ${helpers.displayMember(member)}**, you have successfully linked your **${Manager.config.brand.name}** account to Discord.\n`
+//                 + `${config.emojis.logo} **Hey, ${helpers.displayMember(member)}**, you have successfully linked your **${Manager.config.brand.name}** account to Discord.\n`
 //                 // + `\n`
 //                 // + `You can earn **${config.main.currency}** in the server and use them to purchae free *${Manager.config.brand.name} Premium**! Use ${helpers.displayCommand('account')} in the ${channel} channel.\n`
 //               )

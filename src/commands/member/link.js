@@ -25,7 +25,7 @@ module.exports = {
       .setColor(config.colors.blue)
       .setTitle(`Link your ${Manager.config.brand.name} account`)
       .setDescription(
-        `${config.emojis.mascot} **Hey, ${helpers.displayMember(interaction.member)}**, linking your account is easy! Click the button below to start the process.\n\n`
+        `${config.emojis.logo} **Hey, ${helpers.displayMember(interaction.member)}**, linking your account is easy! Click the button below to start the process.\n\n`
       )
     const components = new ActionRowBuilder()
       .addComponents(
@@ -45,7 +45,7 @@ module.exports = {
             .setColor(config.colors.green)
             .setTitle(`Your ${Manager.config.brand.name} account is already linked`)
             .setDescription(
-              `${config.emojis.mascot} Hey, **${helpers.displayMember(interaction.member)}**, you have already linked your ${Manager.config.brand.name} account with Discord.\n\n`
+              `${config.emojis.logo} Hey, **${helpers.displayMember(interaction.member)}**, you have already linked your ${Manager.config.brand.name} account with Discord.\n\n`
               + `Type the ${helpers.displayCommand('account')} command for details.\n`
             )
         ],
@@ -67,7 +67,7 @@ module.exports = {
           new EmbedBuilder()
             .setColor(config.colors.blue)
             .setTitle(`Link your ${Manager.config.brand.name} account`)
-            .setDescription(`${config.emojis.mascot} Thanks, **${helpers.displayMember(interaction.member)}**, I have sent you a DM with instructions on how to link your ${Manager.config.brand.name} account to Discord!`)
+            .setDescription(`${config.emojis.logo} Thanks, **${helpers.displayMember(interaction.member)}**, I have sent you a DM with instructions on how to link your ${Manager.config.brand.name} account to Discord!`)
         ],
       });
     } catch (e) {
@@ -77,7 +77,7 @@ module.exports = {
       // response
       //   .setColor(config.colors.blue)
       //   .setTitle('Linking failed')
-      //   .setDescription(`${config.emojis.mascot} Hey, **${helpers.displayMember(interaction.member)}**, please enable DMs so I can send you the ${Manager.config.brand.name} account linking guide.`);
+      //   .setDescription(`${config.emojis.logo} Hey, **${helpers.displayMember(interaction.member)}**, please enable DMs so I can send you the ${Manager.config.brand.name} account linking guide.`);
 
       // Reply with the response embed
       return interaction.editReply({

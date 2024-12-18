@@ -28,7 +28,7 @@ module.exports = async function (instance, member) {
       + `\n`
       + `Please familiarize yourself with our ${guidelines} so you understand our rules and learn what this server is about.\n`
       + `\n`
-      + `Thank you and enjoy your stay! ${config.emojis.mascot}\n`
+      + `Thank you and enjoy your stay! ${config.emojis.logo}\n`
     )
     .setThumbnail(member.user.displayAvatarURL())
     .setTimestamp()
@@ -53,7 +53,7 @@ module.exports = async function (instance, member) {
         .setColor(config.colors.blue)
         .setTitle(`Welcome to ${Manager.config.brand.name}!`)
         .setDescription(``
-          + `Hi, **${member}**, welcome to the official ${config.emojis.mascot} **${Manager.config.brand.name} Discord server**! ${config.emojis.mascot}\n`
+          + `Hi, **${member}**, welcome to the official ${config.emojis.logo} **${Manager.config.brand.name} Discord server**! ${config.emojis.logo}\n`
           + `\n`
           + `**${Manager.config.brand.name}** is not just *another* Discord server. We have:\n`
           + `  ${config.messages.welcome.private.bullets.join(' \n  ')}\n`

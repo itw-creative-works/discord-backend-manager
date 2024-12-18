@@ -32,7 +32,7 @@ module.exports = {
           new EmbedBuilder()
             .setColor(config.colors.red)
             .setTitle('Account Link Required')
-            .setDescription(`${config.emojis.mascot} Hey, **${helpers.displayMember(options.user)}**. You need to link your **${Manager.config.brand.name}** and Discord accounts to apply for the **${Manager.config.brand.name} ${helpers.getPrettyRole('beta')} Team**.\n\nUse the ${helpers.displayCommand('link')} command in the ${channelMention(config.channels.chat.commands)} channel.`)
+            .setDescription(`${config.emojis.logo} Hey, **${helpers.displayMember(options.user)}**. You need to link your **${Manager.config.brand.name}** and Discord accounts to apply for the **${Manager.config.brand.name} ${helpers.getPrettyRole('beta')} Team**.\n\nUse the ${helpers.displayCommand('link')} command in the ${channelMention(config.channels.chat.commands)} channel.`)
         ],
       });
 		}
@@ -61,7 +61,7 @@ module.exports = {
           new EmbedBuilder()
           .setColor(config.colors.red)
           .setTitle('Beta Tester application failed')
-          .setDescription(`${config.emojis.mascot} **${helpers.displayMember(options.user)}**, you are too new! Please introduce yourself in the ${channelMention(config.channels.chat.hangout)} channel.`)
+          .setDescription(`${config.emojis.logo} **${helpers.displayMember(options.user)}**, you are too new! Please introduce yourself in the ${channelMention(config.channels.chat.hangout)} channel.`)
         ],
       });
     }
