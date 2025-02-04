@@ -22,7 +22,7 @@ module.exports = {
 
     // Get all emojis in the server
     // const emojis = interaction.guild.emojis.cache.map(emoji => `${emoji}${emoji.name} - \`${emoji}\``);
-    const emojis = interaction.guild.emojis.cache.map(emoji => `${emoji} - \`${emoji}\``);
+    const emojis = interaction.guild.emojis.cache.map(emoji => `${emoji} \`${emoji}\``);
     const chunk = 20;
 
     // Log emojis
