@@ -63,7 +63,7 @@ module.exports = function (instance) {
       },
       premium: {
         types: ['string'],
-        default: '<:premium:1318806989026889808>',
+        default: '<:premium:1342001431053602826>',
         required: false,
       },
       active: {
