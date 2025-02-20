@@ -92,8 +92,6 @@ module.exports = {
 
       // Update description
       list[permission].push(`${helpers.displayCommand(command.data.name)} - ${command.data.description}`);
-			// description += ``
-			// 	+ `${helpers.displayCommand(command.data.name)}: ${command.data.description}\n`
 		})
 
     // Loop through list
