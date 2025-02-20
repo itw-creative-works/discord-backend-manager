@@ -26,9 +26,9 @@ const path = require('path');
 dotenv.config();
 
 // Constants
-const OWNER_PERM = /\/owner\//;
-const ADMIN_PERM = /\/admin\//;
-const MOD_PERM = /\/moderator\//;
+const OWNER_PERM = new RegExp(`\\${path.sep}owner\\${path.sep}`);
+const ADMIN_PERM = new RegExp(`\\${path.sep}admin\\${path.sep}`);
+const MOD_PERM = new RegExp(`\\${path.sep}moderator\\${path.sep}`);
 
 function DiscordManager() {
   const self = this;

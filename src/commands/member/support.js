@@ -69,6 +69,7 @@ module.exports = {
 
       // Log permission
       // assistant.log('Command', command);
+      // assistant.log('Command', name, permission);
 
       // CHECK PERMISSION HERE
       // if (permission && !permissions.has(BigInt(permission))) {
