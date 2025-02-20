@@ -113,7 +113,6 @@ module.exports = {
 	},
 };
 
-
 function toTitleCase(str) {
   return str.replace(
     /\w\S*/g,
