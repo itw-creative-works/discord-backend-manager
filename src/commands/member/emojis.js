@@ -36,7 +36,7 @@ module.exports = {
       await interaction.channel.send(string);
     }
 
-    // Send the list of emojis as a reply
-    return helpers.sendNormal(interaction, `Here are all the emojis in the server:\n${emojis}`, {embed: true});
+    // Return
+    return;
 	},
 };
