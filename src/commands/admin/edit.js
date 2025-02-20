@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, roleMention, channelMention } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, MessageFlags, roleMention, channelMention } = require('discord.js');
 
 module.exports = {
 	data: [
@@ -45,13 +45,13 @@ module.exports = {
         // Inform the user that the message has been edited
         await interaction.followUp({
           content: 'The message has been successfully edited.',
-          ephemeral: true,
+          flags: MessageFlags.Ephemeral,
         });
       } catch (error) {
         assistant.error('Error editing the message:', error);
         await interaction.followUp({
           content: 'There was an error editing the message. Please try again.',
-          ephemeral: true,
+          flags: MessageFlags.Ephemeral,
         });
       }
     });
@@ -60,7 +60,7 @@ module.exports = {
       if (reason === 'time') {
         await interaction.followUp({
           content: 'Time limit reached. The message edit process has been canceled.',
-          ephemeral: true,
+          flags: MessageFlags.Ephemeral,
         });
       }
     });

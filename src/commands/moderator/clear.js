@@ -26,6 +26,7 @@ module.exports = {
 
 		// assistant.log('Command', subcommand, options);
 
+    // Resolve amount
 		const amount = Math.min(options.amount + 1, 100)
 
 		// Handle Clearing

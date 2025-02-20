@@ -1,4 +1,4 @@
-const { EmbedBuilder, BaseInteraction, roleMention, channelMention } = require('discord.js');
+const { EmbedBuilder, BaseInteraction, MessageFlags, roleMention, channelMention } = require('discord.js');
 const Commands = require('../helpers/commands.js');
 
 module.exports = async function (instance, interaction) {
@@ -34,17 +34,22 @@ module.exports = async function (instance, interaction) {
   // Check for blocking
   if (blockCommand) { return };
 
+  // Build payload
+  const payload = {
+    content: loading,
+  }
+
+  // If isMessageInteraction
+  if (isMessageInteraction) {
+    payload.flags = MessageFlags.Ephemeral;
+  }
+
   // Send reply
-  await interaction.reply({ content: loading, ephemeral: isMessageInteraction })
+  await interaction.reply(payload)
   .catch(async (e) => {
-    await interaction.editReply({ content: loading, ephemeral: isMessageInteraction })
+    await interaction.editReply(payload)
     .catch(async (e) => e)
   })
-  // await interaction.reply({ embeds: [loading], ephemeral: isMessageInteraction })
-  // .catch(async (e) => {
-  //   await interaction.editReply({ embeds: [loading], ephemeral: isMessageInteraction })
-  //   .catch(async (e) => e)
-  // })
 
   // Get the Discord profile
   const discordProfile = await profile.get(interaction?.member?.id);

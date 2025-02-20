@@ -21,15 +21,34 @@ module.exports = {
 		const subcommand = event.subcommand;
 		const options = event.options;
 
+    // Libraries
+    const package = require('../../../package.json');
+
 		// assistant.log('Command', subcommand, options);
     const user = os.userInfo();
+    const startTime = assistant.meta.startTime.timestamp;
+    const uptime = calculateUpTime(startTime);
 
+    // Response
     const string = `**Environment:**\n`
-      + `**env**: \`${process.env.ENVIRONMENT}\`\n`
+      + `**Env**: \`${process.env.ENVIRONMENT}\`\n`
+      + `**Discord BEM Version**: \`${package.version}\`\n`
       + `**OS Type**: \`${os.type()}\`\n`
       + `**OS User**: \`${user.username}\`\n`
       + `**CWD**: \`${process.cwd()}\`\n`
+      + `**Start Time**: \`${startTime} (${uptime})\`\n`
 
+    // Send response
 		return helpers.sendNormal(interaction, string, {embed: true})
 	},
 };
+
+function calculateUpTime(startTime) {
+  const now = new Date();
+  const diff = now - new Date(startTime);
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor(diff / (1000 * 60 * 60) % 24);
+  const minutes = Math.floor(diff / (1000 * 60) % 60);
+  const seconds = Math.floor(diff / 1000 % 60);
+  return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+}
