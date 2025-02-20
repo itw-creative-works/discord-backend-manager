@@ -4,7 +4,7 @@ module.exports = {
 	data: [
     new SlashCommandBuilder()
       .setName('event')
-      .setDescription('Test an event')
+      .setDescription('Start an event')
       .addStringOption(option => option.setName('event').setDescription('The event name').setRequired(true))
       .addStringOption(option => option.setName('path').setDescription('The path to the object').setRequired(true))
   ],

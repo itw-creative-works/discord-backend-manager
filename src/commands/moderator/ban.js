@@ -4,7 +4,7 @@ module.exports = {
 	data: [
     new SlashCommandBuilder()
       .setName('ban')
-      .setDescription('Select a member and ban them')
+      .setDescription('Ban a member')
       .addSubcommand(subcommand =>
         subcommand
           .setName('user')

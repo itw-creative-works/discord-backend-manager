@@ -4,7 +4,7 @@ module.exports = {
 	data: [
     new SlashCommandBuilder()
       .setName('kick')
-      .setDescription('Select a member and kick them (but not really)')
+      .setDescription('Kick a member')
       .addUserOption(option => option.setName('user').setDescription('The member to ban').setRequired(true))
       .addStringOption(option => option.setName('reason').setDescription('The reason for the ban').setRequired(true))
   ],

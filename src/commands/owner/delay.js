@@ -4,7 +4,7 @@ module.exports = {
 	data: [
     new SlashCommandBuilder()
       .setName('delay')
-      .setDescription('Restart the bot')
+      .setDescription('Replies with a delayed pong')
   ],
   options: {
 	},
