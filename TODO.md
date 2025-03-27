@@ -6,3 +6,6 @@
 npm uninstall prepare-package && npm i '/Users/ian/Developer/Repositories/ITW-Creative-Works/prepare-package' --save-dev
 
 npm uninstall prepare-package && npm i prepare-package@latest --save-dev
+
+
+MAKE A DELTE ALL FROM USER CONTEXT MENU

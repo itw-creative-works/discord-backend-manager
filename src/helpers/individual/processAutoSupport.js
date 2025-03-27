@@ -61,7 +61,7 @@ module.exports = function (instance, member, message, messages) {
       assistant.log('Backing out because user has reached the daily message limit');
 
       // Get exempt roles
-      const exemptRolesText = '';
+      let exemptRolesText = '';
       const components = [];
 
       // Check if user has any of the exempt roles
