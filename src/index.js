@@ -405,7 +405,7 @@ DiscordManager.prototype.login = async function (file, attempts) {
   }
 
   // Start login
-  await login().catch(e => e);
+  await login();
 
   // Return self
   return self;
