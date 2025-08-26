@@ -34,7 +34,11 @@ module.exports = {
     let deletedCount = 0
     let scannedChannels = 0
 
-    assistant.log('delete-all-messages', `Starting message deletion for user ${userId} in guild ${guild.id}`)
+    // Check if user is in the guild
+    const member = await guild.members.fetch(userId).catch(() => null);
+    const isInGuild = !!member;
+
+    assistant.log('delete-all-messages', `Starting message deletion for user ${userId} in guild ${guild.id}. User in guild: ${isInGuild}`)
 
 		// Handle Clearing by fetching al messages from the user across all channels
     for (const channel of guild.channels.cache.values()) {
@@ -48,10 +52,13 @@ module.exports = {
         continue;
       }
 
-      // Quit if user to delete doesn't have access to view the channel
-      if (!channel.permissionsFor(user).has(PermissionsBitField.Flags.ViewChannel)) {
-        assistant.log('delete-all-messages', `Skipping channel ${combo} as user ${userId} does not have access`);
-        continue;
+      // Only check permissions if user is still in the guild
+      if (isInGuild) {
+        const permissions = channel.permissionsFor(member);
+        if (!permissions || !permissions.has(PermissionsBitField.Flags.ViewChannel)) {
+          assistant.log('delete-all-messages', `Skipping channel ${combo} as user ${userId} does not have access`);
+          continue;
+        }
       }
 
       // Log channel
@@ -64,7 +71,7 @@ module.exports = {
         // Fetch messages
         const messages = await channel.messages.fetch({ limit: 100 });
 
-        // Filter messages from the user and within the last 30 days
+        // Filter messages from the user and within the last X days
         const clear = messages.filter(m => m.author.id === userId && m.createdTimestamp >= maxAge);
 
         // Clear messages

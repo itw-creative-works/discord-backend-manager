@@ -58,8 +58,11 @@ DiscordManager.prototype.init = function (options) {
   // Set Manager property
   Manager.DiscordManager = self;
 
+  // Log init
+  console.log(`Initializing DiscordManager with options: ${JSON.stringify(options)}`);
+
   // Load all server configs
-  glob('servers/*/', {cwd: cwd})
+  glob('servers/*/', { cwd: cwd })
   .forEach((file) => {
     // Split last part usingsystem path separator
     const name = file.split(path.sep).slice(-1)[0];
@@ -95,13 +98,11 @@ DiscordManager.prototype.registerUniversalEntities = function (server, app) {
     files.forEach((file) => {
       // Load route
       app.all(`/${file.name}`, async (req, res) => {
-        return Manager.libraries.cors(req, res, async () => {
-          Manager.Middleware(req, res).run(file.name, {
-            schema: file.name,
-            routesDir: `${__dirname}/routes`,
-            schemasDir: `${__dirname}/schemas`,
-          })
-        });
+        Manager.Middleware(req, res).run(file.name, {
+          schema: file.name,
+          routesDir: `${__dirname}/routes`,
+          schemasDir: `${__dirname}/schemas`,
+        })
       })
     });
   })
@@ -117,7 +118,7 @@ DiscordManager.prototype.login = async function (file, attempts) {
     setupServer: false,
     cwd: projectPath,
     projectPackageDirectory: cwd,
-    fetchStats: false,
+    // fetchStats: false,
     uniqueAppName: name,
     log: false,
     logSavePath: path.join(self.options.logSavePath, name),
@@ -132,6 +133,7 @@ DiscordManager.prototype.login = async function (file, attempts) {
 
   // Setup prefix
   // assistant.setLogPrefix(`${name}`);
+  assistant.log(`Logging in as ${name}...`);
 
   // Set dotenv
   try {
