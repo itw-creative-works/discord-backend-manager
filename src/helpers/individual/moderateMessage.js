@@ -7,6 +7,8 @@ module.exports = async function (instance, member, message) {
   const contentLower = content.toLowerCase();
 
   // Check for crypto scam patterns (multiple Discord attachments)
+  // https://www.reddit.com/r/discordapp/comments/1nphcbv/how_do_i_get_automod_to_block_these_new_scams/
+  // https://github.com/Tazhys/zora/tree/main/src
   const cryptoScamPattern = /(https:\/\/(?:cdn|media)\.(?:discord|discordapp)\.(?:com|net)\/attachments\/\d+\/\d+\/(?:[1234]|image)\.(?:jpg|png|webp)(?:\?.*?)?(?:\s+|$)){2,}/i;
 
   // Check for banned image hosting sites
