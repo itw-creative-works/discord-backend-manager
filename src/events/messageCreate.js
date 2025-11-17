@@ -2,6 +2,7 @@ const { EmbedBuilder, ChannelType } = require('discord.js');
 const processAutoSupport = require('../helpers/individual/processAutoSupport.js');
 const processNormalMessage = require('../helpers/individual/processNormalMessage.js');
 const processStaffPremium = require('../helpers/individual/processStaffPremium.js');
+const moderateMessage = require('../helpers/individual/moderateMessage.js');
 
 module.exports = async function (instance, message) {
   const Manager = instance.Manager;
@@ -28,6 +29,14 @@ module.exports = async function (instance, message) {
 
   // Log message
   assistant.log(`[Message] ${message.author.username} (${message.channel.name}):`, message.content);
+
+  // Moderate message
+  if (isOfficialServer) {
+    const shouldDelete = await moderateMessage(instance, member, message);
+    if (shouldDelete) {
+      return;
+    }
+  }
 
   // Process message
   if (isOfficialServer) {
