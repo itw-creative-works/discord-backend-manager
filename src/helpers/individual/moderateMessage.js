@@ -1,3 +1,11 @@
+// Example SPAM
+/*
+  [image.png](https://imageapp.at/1HVjc5c/1.jpg)
+  [image.png](https://imageapp.at/1HVjc5c/2.jpg)
+  [image.png](https://imageapp.at/1HVjc5c/3.jpg)
+  [image.png](https://imageapp.at/otHnqTm/1.jpg)
+*/
+
 module.exports = async function (instance, member, message) {
   const Manager = instance.Manager;
   const { client, config, helpers } = Manager.discord;
