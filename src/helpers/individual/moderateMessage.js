@@ -4,6 +4,8 @@
   [image.png](https://imageapp.at/1HVjc5c/2.jpg)
   [image.png](https://imageapp.at/1HVjc5c/3.jpg)
   [image.png](https://imageapp.at/otHnqTm/1.jpg)
+
+  ||​||||​||||​||||​|| ... (zero-width spam) ... https://imgur.com/r7Xs2ZC
 */
 
 module.exports = async function (instance, member, message) {
@@ -32,6 +34,15 @@ module.exports = async function (instance, member, message) {
   const numberedImagePattern = /(https?:\/\/[^\s\)]+\/[1234]\.(?:jpg|png|webp))/gi;
   const numberedImageMatches = fullContent.match(numberedImagePattern);
 
+  // Check for zero-width characters (used to hide spam)
+  // \u200B = zero-width space, \u200C = zero-width non-joiner, \u200D = zero-width joiner, \u2060 = word joiner
+  const zeroWidthPattern = /[\u200B\u200C\u200D\u2060]/g;
+  const zeroWidthMatches = content.match(zeroWidthPattern);
+
+  // Check for excessive empty spoiler tags (||​||)
+  const emptySpoilerPattern = /\|\|\u200B?\|\|/g;
+  const emptySpoilerMatches = content.match(emptySpoilerPattern);
+
   // Check for banned image hosting sites
   const bannedImageHosts = [
     'https://i.postimg.cc/',
@@ -58,6 +69,18 @@ module.exports = async function (instance, member, message) {
   if (!reason && numberedImageMatches && numberedImageMatches.length >= 2) {
     reason = 'Crypto scam pattern detected (multiple numbered images)';
     matchedContent = `${numberedImageMatches.length} numbered image links`;
+  }
+
+  // Check for excessive zero-width characters (spam obfuscation technique)
+  if (!reason && zeroWidthMatches && zeroWidthMatches.length >= 10) {
+    reason = 'Spam pattern detected (excessive zero-width characters)';
+    matchedContent = `${zeroWidthMatches.length} zero-width characters`;
+  }
+
+  // Check for excessive empty spoiler tags (||​||)
+  if (!reason && emptySpoilerMatches && emptySpoilerMatches.length >= 5) {
+    reason = 'Spam pattern detected (excessive empty spoiler tags)';
+    matchedContent = `${emptySpoilerMatches.length} empty spoiler tags`;
   }
 
   // Check banned image hosts
