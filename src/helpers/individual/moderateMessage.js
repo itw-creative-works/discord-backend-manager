@@ -25,10 +25,11 @@ module.exports = async function (instance, member, message) {
   const fullContent = [content, ...embedUrls].join(' ');
   const fullContentLower = fullContent.toLowerCase();
 
-  // Check for crypto scam patterns (multiple Discord attachments)
+  // Check for multiple Discord CDN/media attachment links (common scam pattern)
   // https://www.reddit.com/r/discordapp/comments/1nphcbv/how_do_i_get_automod_to_block_these_new_scams/
   // https://github.com/Tazhys/zora/tree/main/src
-  const cryptoScamPattern = /(https:\/\/(?:cdn|media)\.(?:discord|discordapp)\.(?:com|net)\/attachments\/\d+\/\d+\/(?:[1234]|image)\.(?:jpg|png|webp)(?:\?.*?)?(?:\s+|$)){2,}/i;
+  const discordAttachmentPattern = /https:\/\/(?:cdn|media)\.(?:discord|discordapp)\.(?:com|net)\/attachments\/\d+\/\d+\/[^\s]+\.(?:jpg|png|webp|gif)/gi;
+  const discordAttachmentMatches = fullContent.match(discordAttachmentPattern);
 
   // Check for numbered image pattern (1.jpg, 2.jpg, 3.jpg, etc.)
   const numberedImagePattern = /(https?:\/\/[^\s\)]+\/[1234]\.(?:jpg|png|webp))/gi;
@@ -59,10 +60,10 @@ module.exports = async function (instance, member, message) {
   let reason = null;
   let matchedContent = null;
 
-  // Check crypto scam pattern (Discord attachments)
-  if (cryptoScamPattern.test(fullContent)) {
+  // Check for multiple Discord attachment links (3+ is suspicious)
+  if (discordAttachmentMatches && discordAttachmentMatches.length >= 3) {
     reason = 'Crypto scam pattern detected (multiple Discord attachments)';
-    matchedContent = 'Multiple Discord attachment links';
+    matchedContent = `${discordAttachmentMatches.length} Discord attachment links`;
   }
 
   // Check numbered image pattern (multiple numbered images like 1.jpg, 2.jpg, 3.jpg)
