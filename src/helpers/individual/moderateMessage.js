@@ -21,8 +21,13 @@ module.exports = async function (instance, member, message) {
     .map((embed) => embed.url || embed.image?.url || embed.thumbnail?.url)
     .filter(Boolean);
 
-  // Combine content and embed URLs for checking
-  const fullContent = [content, ...embedUrls].join(' ');
+  // Extract URLs from actual file attachments
+  const attachmentUrls = message.attachments
+    .map((attachment) => attachment.url)
+    .filter(Boolean);
+
+  // Combine content, embed URLs, and attachment URLs for checking
+  const fullContent = [content, ...embedUrls, ...attachmentUrls].join(' ');
   const fullContentLower = fullContent.toLowerCase();
 
   // Check for multiple Discord CDN/media attachment links (common scam pattern)
@@ -60,8 +65,24 @@ module.exports = async function (instance, member, message) {
   let reason = null;
   let matchedContent = null;
 
+  // Debug logging for moderation checks
+  if (message.attachments.size > 0 || embedUrls.length > 0) {
+    assistant.log(`[Auto-Moderation] Checking message from ${helpers.displayMember(member, true)}: attachments=${message.attachments.size}, embeds=${embedUrls.length}, contentLength=${content.length}`);
+  }
+
+  // Check for multiple image attachments with little/no text (common crypto scam pattern)
+  // Scammers often post 3-4 images with no explanation
+  const imageAttachments = message.attachments.filter((a) =>
+    a.contentType?.startsWith('image/') || /\.(jpg|jpeg|png|gif|webp)$/i.test(a.name)
+  );
+  const contentWithoutWhitespace = content.replace(/\s/g, '');
+  if (imageAttachments.size >= 3 && contentWithoutWhitespace.length < 20) {
+    reason = 'Crypto scam pattern detected (multiple image attachments with no text)';
+    matchedContent = `${imageAttachments.size} image attachments`;
+  }
+
   // Check for multiple Discord attachment links (3+ is suspicious)
-  if (discordAttachmentMatches && discordAttachmentMatches.length >= 3) {
+  if (!reason && discordAttachmentMatches && discordAttachmentMatches.length >= 3) {
     reason = 'Crypto scam pattern detected (multiple Discord attachments)';
     matchedContent = `${discordAttachmentMatches.length} Discord attachment links`;
   }
@@ -102,10 +123,9 @@ module.exports = async function (instance, member, message) {
     }
   }
 
-  // Log
-  assistant.log(`[Auto-Moderation] Detected issue in message from ${helpers.displayMember(member, true)}: ${reason} - ${matchedContent}`);
-
   if (reason) {
+    // Log only when an issue is detected
+    assistant.log(`[Auto-Moderation] Detected issue in message from ${helpers.displayMember(member, true)}: ${reason} - ${matchedContent}`);
     try {
       // Delete the message
       await message.delete();
