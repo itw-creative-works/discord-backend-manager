@@ -443,7 +443,7 @@ Helpers.prototype.betaTesterAccept = async function (member, uid) {
           + `${helpers.getPrettyRole('premium', Manager.config.brand.name + ' Premium')}\n`
           + `${helpers.getPrettyRole('active', 'Active Member')}\n`
           + `\n`
-          + `:fire: [Purchase ${Manager.config.brand.name} Premium](${self.instance.app.url}/pricing?utm_source=discord-beta-acceptance&utm_medium=discord&utm_campaign=beta-acceptance)\n`
+          + `:fire: [Purchase ${Manager.config.brand.name} Premium](${self.instance.app.brand.url}/pricing?utm_source=discord-beta-acceptance&utm_medium=discord&utm_campaign=beta-acceptance)\n`
         )
     ]
   })

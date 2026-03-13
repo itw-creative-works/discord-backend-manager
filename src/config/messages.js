@@ -16,7 +16,7 @@ module.exports = function (instance) {
           bullets: {
             types: ['array'],
             default: [
-              `:rocket: **Free app** that [grows your business](${instance.app.url}/download?aff=discord-dm) on auto-pilot`,
+              `:rocket: **Free app** that [grows your business](${instance.app.brand.url}/download?aff=discord-dm) on auto-pilot`,
               `:money_with_wings: **Free tools** to help you start an online business`,
               `:heart_eyes: **Friendly** community`,
             ],

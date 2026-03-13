@@ -32,7 +32,7 @@ module.exports = {
         new ButtonBuilder()
           .setLabel('Link your Account')
           .setStyle(ButtonStyle.Link)
-          .setURL(`${instance.app.url}/account/#connectedAccounts`)
+          .setURL(`${instance.app.brand.url}/account/#connectedAccounts`)
       )
 
     // Check if account is already linked

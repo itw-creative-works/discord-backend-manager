@@ -34,15 +34,12 @@ module.exports = {
     }
 
     // Fetch stats
-    fetch(`${instance.app.server}/bm_api`, {
-      method: 'post',
+    fetch(`${instance.Manager.getApiUrl('production')}/backend-manager/admin/stats`, {
+      method: 'get',
       response: 'json',
-      body: {
+      query: {
         backendManagerKey: process.env.BACKEND_MANAGER_KEY,
-        command: 'admin:get-stats',
-        payload: {
-          update: false,
-        },
+        update: false,
       },
     })
     .then(async (response) => {

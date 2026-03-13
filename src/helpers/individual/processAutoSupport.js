@@ -82,9 +82,9 @@ module.exports = function (instance, member, message, messages) {
           components.push(
             new ActionRowBuilder().addComponents(
               new ButtonBuilder()
-                .setLabel(`Get ${instance.app.name} Premium`)
-                .setStyle(ButtonStyle.Success)
-                .setURL(`${instance.app.url}/pricing`)
+                .setLabel(`Get ${instance.app.brand.name} Premium`)
+                .setStyle(ButtonStyle.Link)
+                .setURL(`${instance.app.brand.url}/pricing`)
             )
           )
         }

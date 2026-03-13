@@ -45,7 +45,7 @@ module.exports = {
           new EmbedBuilder()
             .setColor(config.colors.green)
             .setTitle('You are already a Beta Tester')
-            .setDescription(`${config.emojis.betaTester} Hey, **${helpers.displayMember(options.user)}**, you are a member of the **${Manager.config.brand.name} ${helpers.getPrettyRole('beta')} Team**! Congrats!\n\n:partying_face: You have the *exclusive* ${helpers.getPrettyRole('beta')} role and access to the *secret* ${channelMention(config.channels.chat.beta)} channel!\n\n${account.plan.id !== 'basic' ? '' : `:warning: You must be subscribed to [${Manager.config.brand.name} Premium](${instance.app.url}/pricing) to access the ${Manager.config.brand.name} ${helpers.getPrettyRole('beta')} features in the ${Manager.config.brand.name} app.`}`)
+            .setDescription(`${config.emojis.betaTester} Hey, **${helpers.displayMember(options.user)}**, you are a member of the **${Manager.config.brand.name} ${helpers.getPrettyRole('beta')} Team**! Congrats!\n\n:partying_face: You have the *exclusive* ${helpers.getPrettyRole('beta')} role and access to the *secret* ${channelMention(config.channels.chat.beta)} channel!\n\n${account.plan.id !== 'basic' ? '' : `:warning: You must be subscribed to [${Manager.config.brand.name} Premium](${instance.app.brand.url}/pricing) to access the ${Manager.config.brand.name} ${helpers.getPrettyRole('beta')} features in the ${Manager.config.brand.name} app.`}`)
         ],
       });
 		}
@@ -137,7 +137,7 @@ module.exports = {
           new EmbedBuilder()
             .setColor(config.colors.green)
             .setTitle('Beta Tester acceptance')
-            .setDescription(`${config.emojis.betaTester} Congrats, **${helpers.displayMember(options.user)}**! You have been accepted into the **${Manager.config.brand.name} ${helpers.getPrettyRole('beta')} Team**!\n\n:partying_face: You now have the *exclusive* ${helpers.getPrettyRole('beta')} role and access to the *secret* ${channelMention(config.channels.chat.beta)} channel!\n\n${account.plan.id !== 'basic' ? '' : `:warning: You must be subscribed to [${Manager.config.brand.name} Premium](${instance.app.url}/pricing) to access the ${Manager.config.brand.name} ${helpers.getPrettyRole('beta')} features in the ${Manager.config.brand.name} app.`}\n`)
+            .setDescription(`${config.emojis.betaTester} Congrats, **${helpers.displayMember(options.user)}**! You have been accepted into the **${Manager.config.brand.name} ${helpers.getPrettyRole('beta')} Team**!\n\n:partying_face: You now have the *exclusive* ${helpers.getPrettyRole('beta')} role and access to the *secret* ${channelMention(config.channels.chat.beta)} channel!\n\n${account.plan.id !== 'basic' ? '' : `:warning: You must be subscribed to [${Manager.config.brand.name} Premium](${instance.app.brand.url}/pricing) to access the ${Manager.config.brand.name} ${helpers.getPrettyRole('beta')} features in the ${Manager.config.brand.name} app.`}\n`)
         ],
       });
 		} else if (betaTesterStatus.applicationIsDayOld) {
@@ -156,7 +156,7 @@ module.exports = {
             + `\n${helpers.getPrettyRole('premium')}: ${options.user.roles.cache.has(config.roles.premium) ? 'Yes!' : 'No'}`
             + `\n`
             + `\n*Note: your application will **only** be accepted if you are either ${helpers.getPrettyRole('active')} OR ${helpers.getPrettyRole('premium')}.`
-            + `\nYou can buy ${helpers.getPrettyRole('premium')} [here](${instance.app.url}/pricing) OR be active in the Discord server to earn ${helpers.getPrettyRole('active')} manually.`
+            + `\nYou can buy ${helpers.getPrettyRole('premium')} [here](${instance.app.brand.url}/pricing) OR be active in the Discord server to earn ${helpers.getPrettyRole('active')} manually.`
           )
         ],
       });

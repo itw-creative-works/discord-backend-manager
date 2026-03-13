@@ -366,7 +366,7 @@ DiscordManager.prototype.login = async function (file, attempts) {
   });
 
   // Fetch app Object
-  const app = await Manager.getApp();
+  const app = await fetch(`${Manager.getApiUrl('production')}/backend-manager/app`, { response: 'json' });
 
   // Set instance
   self.instances[name] = {

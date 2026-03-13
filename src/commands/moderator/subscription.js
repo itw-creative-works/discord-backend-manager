@@ -42,14 +42,14 @@ module.exports = {
 		}
 
 		const billingProfileQueries = [
-			{field: 'details.uid', operator: '==', value: options.id},
+			{field: 'owner', operator: '==', value: options.id},
 			{field: 'id', operator: '==', value: options.id},
-			{field: 'resolved.resource.id', operator: '==', value: options.id},
+			{field: 'resourceId', operator: '==', value: options.id},
 		];
 		const appProfileQueries = [
 			{field: 'auth.uid', operator: '==', value: options.id},
-			{field: 'plan.payment.orderId', operator: '==', value: options.id},
-			{field: 'plan.payment.resourceId', operator: '==', value: options.id},
+			{field: 'subscription.payment.orderId', operator: '==', value: options.id},
+			{field: 'subscription.payment.resourceId', operator: '==', value: options.id},
 		];
 
 		let message = '';
@@ -90,69 +90,63 @@ module.exports = {
 		// }
 		// for (var i = 0; i < appProfileQueries.length; i++) {
 		// 	if (!appProfile) {
-		// 		appProfile = await _query(`${instance.app.server}/bm_api`, 'users', appProfileQueries[i])
+		// 		appProfile = await _query(`${instance.Manager.getApiUrl('production')}/backend-manager/admin/firestore/query`, 'users', appProfileQueries[i])
 		// 	}
 		// }
 
-		const billingProfile = await fetch(`https://us-central1-itw-creative-works.cloudfunctions.net/bm_api`, {
+		const billingProfile = await fetch(`${instance.Manager.getApiUrl('production')}/backend-manager/admin/firestore/query`, {
 			method: 'post',
 			response: 'json',
 			body: {
 				backendManagerKey: process.env.BACKEND_MANAGER_KEY,
-				command: 'admin:firestore-query',
-				payload: {
-					queries: [
-						{
-							collection: 'subscription-profiles',
-							where: [
-								{field: 'details.uid', operator: '==', value: options.id},
-							],
-						},
-						{
-							collection: 'subscription-profiles',
-							where: [
-								{field: 'id', operator: '==', value: options.id},
-							],
-						},
-						{
-							collection: 'subscription-profiles',
-							where: [
-								{field: 'resolved.resource.id', operator: '==', value: options.id},
-							],
-						},
-					],
-				}
+				queries: [
+					{
+						collection: 'payments-orders',
+						where: [
+							{field: 'owner', operator: '==', value: options.id},
+						],
+					},
+					{
+						collection: 'payments-orders',
+						where: [
+							{field: 'id', operator: '==', value: options.id},
+						],
+					},
+					{
+						collection: 'payments-orders',
+						where: [
+							{field: 'resourceId', operator: '==', value: options.id},
+						],
+					},
+				],
 			},
 		})
 
-		const appProfile = await fetch(`${instance.app.server}/bm_api`, {
+		const appProfile = await fetch(`${instance.Manager.getApiUrl('production')}/backend-manager/admin/firestore/query`, {
 			method: 'post',
 			response: 'json',
 			body: {
 				backendManagerKey: process.env.BACKEND_MANAGER_KEY,
-				command: 'admin:firestore-query',
-				payload: {
-					queries: [
-						{
-							collection: 'users',
-							where: [
-								{field: 'auth.uid', operator: '==', value: options.id},
-							],
-						},
-						{
-							collection: 'users',
-							where: [
-								{field: 'plan.payment.orderId', operator: '==', value: options.id},
-							],
-						},
-						{
-							collection: 'users',
-							where: [
-								{field: 'plan.payment.resourceId', operator: '==', value: options.id},
-							],
-						},
-					],
-				}
+				queries: [
+					{
+						collection: 'users',
+						where: [
+							{field: 'auth.uid', operator: '==', value: options.id},
+						],
+					},
+					{
+						collection: 'users',
+						where: [
+							{field: 'subscription.payment.orderId', operator: '==', value: options.id},
+						],
+					},
+					{
+						collection: 'users',
+						where: [
+							{field: 'subscription.payment.resourceId', operator: '==', value: options.id},
+						],
+					},
+				],
 			},
 		})
 
@@ -164,7 +158,7 @@ module.exports = {
 		if (billingProfile[0]) {
 			billingProfile
 			.forEach((profile, index) => {
-				message += `**${index + 1}:** id=${profile.data.resolved.resource.id}, processor=${profile.data.processor}, expires=${profile.data.resolved.expires.timestamp}, paid=${profile.data.resolved.payment.completed}, status=${profile.data.resolved.status}\n`
+				message += `**${index + 1}:** id=${profile.data.resourceId}, processor=${profile.data.processor}, expires=${profile.data.unified.expires?.timestamp}, paid=${profile.data.unified.status === 'active'}, status=${profile.data.unified.status}\n`
 			});
 		} else {
 			message += '*none*'
@@ -173,7 +167,7 @@ module.exports = {
 		// Attach account plan data
 		message += `\n\n**Profile Attached to ${Manager.config.brand.name}**\n`
 		if (appProfile[0]) {
-			message += `id=${appProfile[0].data.plan.payment.resourceId}, processor=${appProfile[0].data.plan.payment.processor}, expires=${appProfile[0].data.plan.expires.timestamp}\n`
+			message += `id=${appProfile[0].data.subscription?.payment?.resourceId}, processor=${appProfile[0].data.subscription?.payment?.processor}, expires=${appProfile[0].data.subscription?.expires?.timestamp}\n`
 		} else {
 			message += '*none*'
 		}
