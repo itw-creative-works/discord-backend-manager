@@ -3,7 +3,7 @@ module.exports = function (assistant) {
     // DEFAULTS
     ['defaults']: {
       // Common
-      app: {
+      brand: {
         types: ['string'],
         default: '',
         value: undefined,

@@ -17,7 +17,7 @@ Route.prototype.main = async function (assistant) {
   const analytics = assistant.analytics;
   const settings = assistant.settings;
   const DiscordManager = Manager.DiscordManager;
-  const instance = DiscordManager.instances[settings.app];
+  const instance = DiscordManager.instances[settings.brand];
 
   // Load Discord Libraries
   const { client, config, helpers, profile, events, commands, contextMenus, processes, invites, fastify } = Manager.discord;

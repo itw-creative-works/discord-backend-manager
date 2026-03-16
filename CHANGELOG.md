@@ -15,6 +15,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `Security` in case of vulnerabilities.
 
 ---
+## [1.2.28] - 2026-03-16
+### Changed
+- Renamed entity concept from `app` to `brand` across the codebase (variables, properties, endpoint paths, schemas)
+
+---
 ## [1.0.0] - 2024-06-19
 ### Added
 - Initial release of the project 🚀

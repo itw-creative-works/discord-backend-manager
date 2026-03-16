@@ -80,7 +80,7 @@ module.exports = {
           break;
 
         case 'async-dns':
-          // Async DNS error (simulates Manager.getApp() error)
+          // Async DNS error (simulates Manager.getBrand() error)
           assistant.error('Triggering async DNS error...');
           (async () => {
             const error = new Error('getaddrinfo ENOTFOUND us-central1-itw-creative-works.cloudfunctions.net');

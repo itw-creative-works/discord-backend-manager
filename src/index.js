@@ -365,8 +365,8 @@ DiscordManager.prototype.login = async function (file, attempts) {
     assistant.error('[Discord disconnect]', message);
   });
 
-  // Fetch app Object
-  const app = await fetch(`${Manager.getApiUrl('production')}/backend-manager/app`, { response: 'json' });
+  // Fetch brand
+  const brand = await fetch(`${Manager.getApiUrl('production')}/backend-manager/brand`, { response: 'json' });
 
   // Set instance
   self.instances[name] = {
@@ -375,7 +375,7 @@ DiscordManager.prototype.login = async function (file, attempts) {
     assistant: assistant,
     client: client,
     rest: rest,
-    app: app,
+    brand: brand,
   };
 
   // Login using attempts
