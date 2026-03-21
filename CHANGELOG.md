@@ -15,6 +15,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `Security` in case of vulnerabilities.
 
 ---
+## [1.2.33] - 2026-03-21
+### Deprecated
+- Commented out `/premium` moderator command and `processStaffPremium` auto-premium helper — both directly wrote premium plans to Firestore, which is no longer the desired flow
+
+---
 ## [1.2.28] - 2026-03-16
 ### Changed
 - Renamed entity concept from `app` to `brand` across the codebase (variables, properties, endpoint paths, schemas)
