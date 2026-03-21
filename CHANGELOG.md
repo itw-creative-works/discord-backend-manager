@@ -15,6 +15,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `Security` in case of vulnerabilities.
 
 ---
+## [1.2.35] - 2026-03-21
+### Fixed
+- Skip deprecated commands with empty or invalid data during registration, fixing `toJSON is not a function` crash caused by commented-out premium.js exporting `data: []`
+
+---
 ## [1.2.34] - 2026-03-21
 ### Fixed
 - Fixed crash in `resolveCommand` when `command.data` lacks `setDefaultMemberPermissions` (e.g. when `loadCommand` fallback returns a raw array)

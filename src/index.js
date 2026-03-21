@@ -232,6 +232,11 @@ DiscordManager.prototype.login = async function (file, attempts) {
       files.forEach(file => {
         const item = loadCommand(assistant, file.path);
 
+        // Skip commands with empty or invalid data (e.g. deprecated commands)
+        if (!item.data || !item.data.name) {
+          return;
+        }
+
         // Register command
         set(Manager, `discord.commands.${item.data.name}`, item);
 
@@ -251,6 +256,11 @@ DiscordManager.prototype.login = async function (file, attempts) {
     .then(async (files) => {
       files.forEach(file => {
         const item = loadCommand(assistant, file.path);
+
+        // Skip commands with empty or invalid data (e.g. deprecated commands)
+        if (!item.data || !item.data.name) {
+          return;
+        }
 
         // Register context menu
         set(Manager, `discord.contextMenus.${file.name}`, item);
