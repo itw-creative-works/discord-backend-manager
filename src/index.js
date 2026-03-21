@@ -495,16 +495,22 @@ function iterate(pattern, customDir, options) {
 
 function resolveCommand(command, filePath) {
   if (filePath.match(OWNER_PERM)) {
-    command.data.setDefaultMemberPermissions(PermissionFlagsBits.Administrator);
     command.permission = 'owner';
   } else if (filePath.match(ADMIN_PERM)) {
-    command.data.setDefaultMemberPermissions(PermissionFlagsBits.Administrator);
     command.permission = 'admin';
   } else if (filePath.match(MOD_PERM)) {
-    command.data.setDefaultMemberPermissions(PermissionFlagsBits.KickMembers | PermissionFlagsBits.BanMembers);
     command.permission = 'moderator';
   } else {
     command.permission = 'member';
+  }
+
+  // Set default member permissions based on the permission level
+  if (typeof command.data.setDefaultMemberPermissions === 'function') {
+    if (command.permission === 'owner' || command.permission === 'admin') {
+      command.data.setDefaultMemberPermissions(PermissionFlagsBits.Administrator);
+    } else if (command.permission === 'moderator') {
+      command.data.setDefaultMemberPermissions(PermissionFlagsBits.KickMembers | PermissionFlagsBits.BanMembers);
+    }
   }
 }
 

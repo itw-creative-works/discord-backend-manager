@@ -15,6 +15,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `Security` in case of vulnerabilities.
 
 ---
+## [1.2.34] - 2026-03-21
+### Fixed
+- Fixed crash in `resolveCommand` when `command.data` lacks `setDefaultMemberPermissions` (e.g. when `loadCommand` fallback returns a raw array)
+
+### Changed
+- Bumped `@discordjs/voice` to ^0.19.2 and `backend-manager` to ^5.0.168
+
+---
 ## [1.2.33] - 2026-03-21
 ### Deprecated
 - Commented out `/premium` moderator command and `processStaffPremium` auto-premium helper — both directly wrote premium plans to Firestore, which is no longer the desired flow
