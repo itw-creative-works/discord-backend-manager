@@ -38,12 +38,7 @@ module.exports = function (instance) {
 
       // Chatsy
       chatsy: {
-        accountId: {
-          types: ['string'],
-          default: '',
-          required: true,
-        },
-        chatId: {
+        agentId: {
           types: ['string'],
           default: '',
           required: true,

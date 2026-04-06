@@ -15,6 +15,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `Security` in case of vulnerabilities.
 
 ---
+## [1.2.36] - 2026-04-06
+### Changed
+- Migrate Chatsy integration from deprecated `/converse` to new `/agents/{agentId}/chat` endpoint
+- Remove bot mention requirement for auto-support when message has readable content
+- Replace `accountId` + `chatId` config with single `agentId`
+- Bump `backend-manager` to ^5.0.192 and `discord.js` to ^14.26.2
+
+### Fixed
+- Fix config reference from `supportInstructions` to `includeSupportInstructions`
+
+---
 ## [1.2.35] - 2026-03-21
 ### Fixed
 - Skip deprecated commands with empty or invalid data during registration, fixing `toJSON is not a function` crash caused by commented-out premium.js exporting `data: []`

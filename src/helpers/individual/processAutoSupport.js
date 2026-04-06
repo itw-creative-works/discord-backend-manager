@@ -110,8 +110,8 @@ module.exports = function (instance, member, message, messages) {
       return
     }
 
-    // Check if message has a mention
-    if (!mentionedBot || (mentionedBot && messageContent.length === 0)) {
+    // Check if message has a mention (skip requirement if message has readable content)
+    if (messageContent.length === 0) {
       // If user is staff, ignore
       if (helpers.isPrivelagedMember(member) && process.env.ENVIRONMENT === 'production') {
         assistant.log('Backing out because user is staff');
@@ -148,24 +148,21 @@ module.exports = function (instance, member, message, messages) {
     // Simulate typing
     message.channel.sendTyping();
 
-    // Get user's Chatsy chatID from Firebase
+    // Get user's Chatsy conversation from Firebase
     const discordProfile = await profile.get(member.id);
     const firebaseAccount = await helpers.getFirebaseAccount(member.id);
     const conversationId = discordProfile?.chatsy?.conversationId || null;
     // Add some context that this is from Discord so the bot doesnt tell the user to go to Discord
     const finalMessageContent = `{context=discord application} ${messageContent}`
 
-    // If user doesn't have a chatID, ignore
-    fetch('https://api.chatsy.ai/converse', {
+    // Send message to Chatsy
+    fetch(`https://api.chatsy.ai/agents/${config.settings.chatsy.agentId}/chat`, {
       method: 'post',
       response: 'json',
       body: {
-        accountId: config.settings.chatsy.accountId,
-        chatId: config.settings.chatsy.chatId,
-        conversationId: conversationId,
         message: finalMessageContent,
-        // sessionData: getSessionData(),
-        userData: {
+        conversationId: conversationId,
+        user: {
           discord: true,
           discordId: member.id,
           username: member.user.username + member.user.discriminator,
@@ -175,7 +172,6 @@ module.exports = function (instance, member, message, messages) {
       },
     })
     .then(async (response) => {
-      // assistant.log('---response', response);
       const lastMessage = response.messages[response.messages.length - 1];
 
       // Add the user's name to the message
@@ -183,7 +179,7 @@ module.exports = function (instance, member, message, messages) {
 
       // Add support instructions to the first message since server restart
       // if (messagesFromThisChannel === 1) {
-      if (messagesFromThisChannel <= 3 && config.settings.chatsy.supportInstructions) {
+      if (messagesFromThisChannel <= 3 && config.settings.chatsy.includeSupportInstructions) {
         lastMessage.content += ``
           + `\n\n`
           + `**Here's more things to try**\n`
