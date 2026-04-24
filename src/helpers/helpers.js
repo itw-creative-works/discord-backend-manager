@@ -20,7 +20,7 @@ function Helpers(instance) {
   moment = self.Manager.require('moment');
   jetpack = self.Manager.require('fs-jetpack');
   get = self.Manager.require('lodash').get;
-  argv = self.Manager.require('yargs').argv;
+  argv = self.Manager.require('yargs')(process.argv.slice(2)).argv;
 
   // Return
   return self;

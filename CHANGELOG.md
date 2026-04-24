@@ -15,6 +15,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `Security` in case of vulnerabilities.
 
 ---
+## [1.2.38] - 2026-04-23
+### Fixed
+- Fix `autoActivityStarter` crash caused by yargs v18 no longer exposing static `.argv` — now call yargs as a function with `process.argv.slice(2)`
+
+---
+## [1.2.37] - 2026-04-23
+### Changed
+- Bump `backend-manager` to ^5.0.199, `discord.js` to ^14.26.3, and `prepare-package` to ^2.1.0
+
+---
 ## [1.2.36] - 2026-04-06
 ### Changed
 - Migrate Chatsy integration from deprecated `/converse` to new `/agents/{agentId}/chat` endpoint
