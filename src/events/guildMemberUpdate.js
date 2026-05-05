@@ -58,7 +58,7 @@ module.exports = async function (instance, oldMember, newMember) {
     helpers.getFirebaseAccount(member.id)
     .then(async (account) => {
 
-      if (account.auth.uid) {
+      if (account.auth?.uid) {
         assistant.log('Sending update', account.auth.uid, rolesUpdate);
         Manager.libraries.initializedAdmin.firestore().doc(`users/${account.auth.uid}`)
         .set({

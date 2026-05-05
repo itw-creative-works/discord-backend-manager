@@ -61,12 +61,16 @@ module.exports = {
 			let betaStatus;
 			const betaApplicationStatus = helpers.betaTesterStatus(interaction.member, discordProfile);
 
+			// Resolve effective subscription plan from raw user doc
+			const User = Manager.libraries.User || (Manager.User() && Manager.libraries.User);
+			const subscription = User.resolveSubscription(account);
+
 			// assistant.log('---discordProfile', discordProfile);
 			// assistant.log('---betaApplicationStatus', betaApplicationStatus);
 
 			// Handle premium status
-			if (account.plan.id && account.plan.id !== 'basic') {
-				const timestamp = account.plan.expires.timestamp;
+			if (subscription.plan !== 'basic') {
+				const timestamp = account.subscription?.expires?.timestamp;
 				const premiumExpireDays = moment(timestamp).diff(moment(), 'days');
 				premiumStatus = `Active ${premiumExpireDays < 365 ? `(Expires ${new Date(timestamp).toLocaleDateString()}` : ''}`
 			} else {
@@ -74,7 +78,7 @@ module.exports = {
 			}
 
 			// Handle beta status
-			if (account.roles.betaTester) {
+			if (account.roles?.betaTester) {
 				betaStatus = `Active`
 			} else {
 				const timestamp = betaApplicationStatus.applicationDate;
@@ -82,13 +86,13 @@ module.exports = {
 			}
 
 			// Build account text
-			if (account.auth.uid) {
+			if (account.auth?.uid) {
 				description += ``
 					+ `:bust_in_silhouette: **UID**: ${account.auth.uid}\n`
 					+ `:e_mail: **Email**: ${helpers.privatize(account.auth.email)}\n`
 					+ `${helpers.getPrettyRole('premium')}: ${premiumStatus}\n`
 					+ `${helpers.getPrettyRole('beta')}: ${betaStatus}\n`
-					+ `:hatching_chick: **Created**: ${new Date(account.activity.created.timestamp).toLocaleDateString()}\n`
+					+ `:hatching_chick: **Created**: ${new Date(account.metadata?.created?.timestamp).toLocaleDateString()}\n`
 					+ `\n`
 			} else {
 				description += ``
@@ -111,7 +115,7 @@ module.exports = {
         + `Items can be obtained by using the ${helpers.displayCommand('shop')} command in the ${commands} channel!`
 				+ `\n`
 
-			if (account.auth.uid) {
+			if (account.auth?.uid) {
 				processes['sync-roles'].execute(instance, {id: options.user.id})
 				.catch(e => {
 					assistant.error('Error', e);

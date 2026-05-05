@@ -26,7 +26,7 @@ module.exports = {
 		.then(async (account) => {
 			const response = new EmbedBuilder()
 
-			if (account.auth.uid) {
+			if (account.auth?.uid) {
 				await Manager.libraries.initializedAdmin.firestore().doc(`users/${account.auth.uid}`)
 				.set({
 					oauth2: {discord: {}}

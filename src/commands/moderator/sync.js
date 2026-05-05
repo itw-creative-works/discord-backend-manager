@@ -44,7 +44,7 @@ module.exports = {
       log: true,
       cacheBreaker: false,
       body: {
-        uid: receiver.auth.uid,
+        uid: receiver.auth?.uid,
       },
     }
 
@@ -60,11 +60,11 @@ module.exports = {
 		_sync(1000);
 
 		// Check for errors
-		if (!issuer.auth.uid) {
+		if (!issuer.auth?.uid) {
 			return helpers.sendError(interaction, `Your account is not linked. Please use the ${helpers.displayCommand('link')} command.`, {embed: true});
-		} else if (!receiver.auth.uid) {
+		} else if (!receiver.auth?.uid) {
 			return helpers.sendError(interaction, `**${helpers.displayMember(options.user, true)}** has not linked their account. Please instruct them to ${helpers.displayCommand('link')} their account. However, ${helpers.displayCommand('sync-roles')} has still executed.`, {embed: true});
-		} else if (!issuer.roles.moderator) {
+		} else if (!issuer.roles?.moderator) {
 			return helpers.sendError(interaction, 'This command can only be used by moderators.', {embed: true});
 		} else if (!options.duration > 1) {
 			return helpers.sendError(interaction, 'You can currently give premium for a maximum of 1 day.', {embed: true});

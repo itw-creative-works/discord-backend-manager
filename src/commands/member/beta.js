@@ -24,8 +24,12 @@ module.exports = {
 		// Get the Firebase account
 		const account = await helpers.getFirebaseAccount(options.user.id);
 
+		// Resolve effective subscription plan from raw user doc
+		const User = Manager.libraries.User || (Manager.User() && Manager.libraries.User);
+		const subscription = User.resolveSubscription(account);
+
 		// Check if account is linked
-		if (config.settings.beta.accountLinkRequired && !account.auth.uid) {
+		if (config.settings.beta.accountLinkRequired && !account.auth?.uid) {
 		  return interaction.editReply({
         content: '',
         embeds: [
@@ -38,14 +42,14 @@ module.exports = {
 		}
 
 		// Check if user already has beta tester role
-		if (account.roles.betaTester && options.user.roles.cache.has(config.roles.betaTester)) {
+		if (account.roles?.betaTester && options.user.roles.cache.has(config.roles.betaTester)) {
 		  return interaction.editReply({
         content: '',
         embeds: [
           new EmbedBuilder()
             .setColor(config.colors.green)
             .setTitle('You are already a Beta Tester')
-            .setDescription(`${config.emojis.betaTester} Hey, **${helpers.displayMember(options.user)}**, you are a member of the **${Manager.config.brand.name} ${helpers.getPrettyRole('beta')} Team**! Congrats!\n\n:partying_face: You have the *exclusive* ${helpers.getPrettyRole('beta')} role and access to the *secret* ${channelMention(config.channels.chat.beta)} channel!\n\n${account.plan.id !== 'basic' ? '' : `:warning: You must be subscribed to [${Manager.config.brand.name} Premium](${instance.brand.brand.url}/pricing) to access the ${Manager.config.brand.name} ${helpers.getPrettyRole('beta')} features in the ${Manager.config.brand.name} app.`}`)
+            .setDescription(`${config.emojis.betaTester} Hey, **${helpers.displayMember(options.user)}**, you are a member of the **${Manager.config.brand.name} ${helpers.getPrettyRole('beta')} Team**! Congrats!\n\n:partying_face: You have the *exclusive* ${helpers.getPrettyRole('beta')} role and access to the *secret* ${channelMention(config.channels.chat.beta)} channel!\n\n${subscription.plan !== 'basic' ? '' : `:warning: You must be subscribed to [${Manager.config.brand.name} Premium](${instance.brand.brand.url}/pricing) to access the ${Manager.config.brand.name} ${helpers.getPrettyRole('beta')} features in the ${Manager.config.brand.name} app.`}`)
         ],
       });
 		}
@@ -129,7 +133,7 @@ module.exports = {
 
 		// Handle different beta tester application statuses
 		if (betaTesterStatus.applicationAccepted) {
-			await helpers.betaTesterAccept(options.user, account.auth.uid);
+			await helpers.betaTesterAccept(options.user, account.auth?.uid);
 
 		  return interaction.editReply({
         content: '',
@@ -137,7 +141,7 @@ module.exports = {
           new EmbedBuilder()
             .setColor(config.colors.green)
             .setTitle('Beta Tester acceptance')
-            .setDescription(`${config.emojis.betaTester} Congrats, **${helpers.displayMember(options.user)}**! You have been accepted into the **${Manager.config.brand.name} ${helpers.getPrettyRole('beta')} Team**!\n\n:partying_face: You now have the *exclusive* ${helpers.getPrettyRole('beta')} role and access to the *secret* ${channelMention(config.channels.chat.beta)} channel!\n\n${account.plan.id !== 'basic' ? '' : `:warning: You must be subscribed to [${Manager.config.brand.name} Premium](${instance.brand.brand.url}/pricing) to access the ${Manager.config.brand.name} ${helpers.getPrettyRole('beta')} features in the ${Manager.config.brand.name} app.`}\n`)
+            .setDescription(`${config.emojis.betaTester} Congrats, **${helpers.displayMember(options.user)}**! You have been accepted into the **${Manager.config.brand.name} ${helpers.getPrettyRole('beta')} Team**!\n\n:partying_face: You now have the *exclusive* ${helpers.getPrettyRole('beta')} role and access to the *secret* ${channelMention(config.channels.chat.beta)} channel!\n\n${subscription.plan !== 'basic' ? '' : `:warning: You must be subscribed to [${Manager.config.brand.name} Premium](${instance.brand.brand.url}/pricing) to access the ${Manager.config.brand.name} ${helpers.getPrettyRole('beta')} features in the ${Manager.config.brand.name} app.`}\n`)
         ],
       });
 		} else if (betaTesterStatus.applicationIsDayOld) {

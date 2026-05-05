@@ -230,8 +230,9 @@ Helpers.prototype.getFirebaseAccount = function (id) {
         account = doc.data();
       });
 
-      return resolve(assistant.resolveAccount(account));
+      return resolve(account);
     })
+    .catch(reject);
   });
 }
 

@@ -35,9 +35,9 @@ module.exports = {
 		const issuer = await helpers.getFirebaseAccount(interaction.member.id).catch(e => e);
 
 		// Check for errors
-		if (!issuer.auth.uid) {
+		if (!issuer.auth?.uid) {
 			return helpers.sendError(interaction, `Your account is not linked. Please use the ${helpers.displayCommand('link')} command.`, {embed: true});
-		} else if (!issuer.roles.moderator) {
+		} else if (!issuer.roles?.moderator) {
 			return helpers.sendError(interaction, 'This command can only be used by moderators.', {embed: true});
 		}
 

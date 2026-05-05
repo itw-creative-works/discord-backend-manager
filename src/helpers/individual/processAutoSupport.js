@@ -166,8 +166,8 @@ module.exports = function (instance, member, message, messages) {
           discord: true,
           discordId: member.id,
           username: member.user.username + member.user.discriminator,
-          uid: firebaseAccount.auth.uid || null,
-          email: firebaseAccount.auth.email || null,
+          uid: firebaseAccount.auth?.uid || null,
+          email: firebaseAccount.auth?.email || null,
         },
       },
     })

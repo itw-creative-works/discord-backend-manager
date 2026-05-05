@@ -15,6 +15,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `Security` in case of vulnerabilities.
 
 ---
+## [1.2.39] - 2026-05-05
+### Fixed
+- Fix `TypeError: assistant.resolveAccount is not a function` in `getFirebaseAccount` that crashed `/beta`, `/account`, `/link`, `/sync`, and guild member updates after BEM removed `Assistant.resolveAccount`
+
+### Changed
+- Migrate to BEM's new user schema: `getFirebaseAccount` now returns the raw Firestore doc (matching BEM's `resolveUser` pattern), with no defaults merged in so writebacks stay clean
+- Replace legacy `account.plan.id` reads with `User.resolveSubscription()` computed at the call site
+- Replace `account.plan.expires.timestamp` with `account.subscription?.expires?.timestamp`
+- Replace `account.activity.created.timestamp` with `account.metadata?.created?.timestamp`
+- Convert all `account.auth.uid` and `account.roles.X` accesses to optional chaining so consumers safely handle missing user docs
+- Bump `backend-manager` to ^5.0.200 and `discord.js` to ^14.26.4
+
+---
 ## [1.2.38] - 2026-04-23
 ### Fixed
 - Fix `autoActivityStarter` crash caused by yargs v18 no longer exposing static `.argv` — now call yargs as a function with `process.argv.slice(2)`

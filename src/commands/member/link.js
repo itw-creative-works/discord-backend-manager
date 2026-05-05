@@ -36,7 +36,7 @@ module.exports = {
       )
 
     // Check if account is already linked
-    if (account.auth.uid) {
+    if (account.auth?.uid) {
       // Reply with the response embed
       return interaction.editReply({
         content: '',

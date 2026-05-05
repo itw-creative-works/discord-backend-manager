@@ -84,15 +84,20 @@ module.exports = {
             return;
           }
 
+          // Resolve effective subscription plan from raw user doc
+          const User = Manager.libraries.User || (Manager.User() && Manager.libraries.User);
+          const subscription = User.resolveSubscription(linkedAccount);
+
           // Give linked
-          if (linkedAccount.auth.uid) {
+          if (linkedAccount.auth?.uid) {
             _addRole(member, config.roles.linked);
           } else {
             _removeRole(member, config.roles.linked);
           }
 
           // Prepare Firebase roles
-          if (linkedAccount.auth.uid && moment(linkedAccount.activity.created.timestamp).isBefore(moment(config.settings.ogCutoffDate))) {
+          if (linkedAccount.auth?.uid && moment(linkedAccount.metadata?.created?.timestamp).isBefore(moment(config.settings.ogCutoffDate))) {
+            linkedAccount.roles = linkedAccount.roles || {};
             linkedAccount.roles.og = true;
           }
 
@@ -102,7 +107,7 @@ module.exports = {
             // const discordSnowflake = config.roles[role.id];
             const discordRoleId = Object.keys(config.roles).find(key => key.match(role.regex))
             const discordRoleSnowflake = config.roles[discordRoleId];
-            const hasRole = !!linkedAccount.roles[role.id];
+            const hasRole = !!linkedAccount.roles?.[role.id];
 
             if (discordRoleSnowflake) {
               if (hasRole) {
@@ -118,7 +123,7 @@ module.exports = {
           _removeRole(member, config.roles.bot);
 
           // Fix premium & betaTester roles
-          if (linkedAccount.plan.id !== 'basic') {
+          if (subscription.plan !== 'basic') {
             _addRole(member, config.roles.premium);
           } else {
             _removeRole(member, config.roles.premium);
@@ -172,11 +177,11 @@ module.exports = {
           }
 
           // Approve beta application
-          // assistant.log('---APP', member.id, linkedAccount.auth.uid, linkedAccount.roles.betaTester, betaTesterStatus.applicationAccepted);
+          // assistant.log('---APP', member.id, linkedAccount.auth?.uid, linkedAccount.roles?.betaTester, betaTesterStatus.applicationAccepted);
           // ---APP 600971083520147466 null false true
           if (
-            linkedAccount.auth.uid
-            && !linkedAccount.roles.betaTester
+            linkedAccount.auth?.uid
+            && !linkedAccount.roles?.betaTester
             && betaTesterStatus.applicationAccepted
           ) {
             helpers.betaTesterAccept(member, linkedAccount.auth.uid)
