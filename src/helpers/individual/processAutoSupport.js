@@ -145,12 +145,15 @@ module.exports = function (instance, member, message, messages) {
       return
     }
 
-    // Simulate typing
+    // Show typing indicator before any awaits so the user sees feedback immediately
     message.channel.sendTyping();
 
-    // Get user's Chatsy conversation from Firebase
-    const discordProfile = await profile.get(member.id);
-    const firebaseAccount = await helpers.getFirebaseAccount(member.id);
+    // Fetch profile + Firebase account in parallel (each is a separate Firestore round-trip)
+    const [discordProfile, firebaseAccount] = await Promise.all([
+      profile.get(member.id),
+      helpers.getFirebaseAccount(member.id),
+    ]);
+
     const conversationId = discordProfile?.chatsy?.conversationId || null;
     // Add some context that this is from Discord so the bot doesnt tell the user to go to Discord
     const finalMessageContent = `{context=discord application} ${messageContent}`

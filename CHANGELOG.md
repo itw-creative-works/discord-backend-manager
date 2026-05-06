@@ -15,6 +15,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `Security` in case of vulnerabilities.
 
 ---
+## [1.2.43] - 2026-05-06
+### Changed
+- Show typing indicator immediately in auto-support flow (before Firestore reads, not after) so it appears within ~1s instead of ~10s
+- Parallelize `profile.get` and `helpers.getFirebaseAccount` via `Promise.all` so the two Firestore round-trips run concurrently
+
+---
 ## [1.2.42] - 2026-05-06
 ### Fixed
 - Revert Chatsy auto-support URL to `/agents/{agentId}/chat` (the path Chatsy's hosting rewrite actually routes); the unified `/agents/chat` path introduced in v1.2.40 was dead code on the server and was falling through to `POST /agents` (agent creation), producing a misleading "max agents" 403
