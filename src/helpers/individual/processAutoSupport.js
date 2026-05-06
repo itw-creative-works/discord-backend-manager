@@ -162,6 +162,7 @@ module.exports = function (instance, member, message, messages) {
       method: 'post',
       response: 'json',
       body: {
+        backendManagerKey: process.env.BACKEND_MANAGER_KEY,
         id: config.settings.chatsy.agentId,
         mode: 'live',
         message: finalMessageContent,

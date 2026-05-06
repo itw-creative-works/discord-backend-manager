@@ -15,6 +15,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `Security` in case of vulnerabilities.
 
 ---
+## [1.2.41] - 2026-05-06
+### Fixed
+- Fix Chatsy auto-support 401 "Authentication required" by passing `backendManagerKey` from `process.env.BACKEND_MANAGER_KEY` in the request body (consuming bot project must have `BACKEND_MANAGER_KEY` set in its `.env` matching Chatsy's deployed value)
+
+---
 ## [1.2.40] - 2026-05-06
 ### Changed
 - Migrate Chatsy auto-support from `/agents/{agentId}/chat` to the unified `/agents/chat` endpoint
