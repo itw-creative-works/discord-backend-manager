@@ -156,10 +156,14 @@ module.exports = function (instance, member, message, messages) {
     const finalMessageContent = `{context=discord application} ${messageContent}`
 
     // Send message to Chatsy
-    fetch(`https://api.chatsy.ai/agents/${config.settings.chatsy.agentId}/chat`, {
+    assistant.log(`[chatsy] Request: agentId=${config.settings.chatsy.agentId}, conversationId=${conversationId || 'new'}, messageLength=${finalMessageContent.length}, member=${member.id}`);
+
+    fetch(`https://api.chatsy.ai/agents/chat`, {
       method: 'post',
       response: 'json',
       body: {
+        id: config.settings.chatsy.agentId,
+        mode: 'live',
         message: finalMessageContent,
         conversationId: conversationId,
         user: {
@@ -172,6 +176,8 @@ module.exports = function (instance, member, message, messages) {
       },
     })
     .then(async (response) => {
+      assistant.log(`[chatsy] Response: conversationId=${response?.id}, messages=${response?.messages?.length}, member=${member.id}`);
+
       const lastMessage = response.messages[response.messages.length - 1];
 
       // Add the user's name to the message
@@ -200,6 +206,8 @@ module.exports = function (instance, member, message, messages) {
       });
     })
     .catch(async (e) => {
+      assistant.error(`[chatsy] Request failed for member=${member.id}: ${e.message}`, e);
+
       // Reply with support
       await message.reply({
         embeds: [

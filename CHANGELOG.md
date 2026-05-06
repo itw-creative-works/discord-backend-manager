@@ -15,6 +15,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `Security` in case of vulnerabilities.
 
 ---
+## [1.2.40] - 2026-05-06
+### Changed
+- Migrate Chatsy auto-support from `/agents/{agentId}/chat` to the unified `/agents/chat` endpoint
+- Pass agent ID in the request body as `id` (was a URL path param) and explicitly set `mode: 'live'`
+
+### Added
+- Chatsy lifecycle logs: pre-request (agentId, conversationId, message length), response (conversationId, message count), and failure log via `assistant.error()` so server-side errors are visible
+
+---
 ## [1.2.39] - 2026-05-05
 ### Fixed
 - Fix `TypeError: assistant.resolveAccount is not a function` in `getFirebaseAccount` that crashed `/beta`, `/account`, `/link`, `/sync`, and guild member updates after BEM removed `Assistant.resolveAccount`
