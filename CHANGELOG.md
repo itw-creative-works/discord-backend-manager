@@ -15,6 +15,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `Security` in case of vulnerabilities.
 
 ---
+## [1.2.42] - 2026-05-06
+### Fixed
+- Revert Chatsy auto-support URL to `/agents/{agentId}/chat` (the path Chatsy's hosting rewrite actually routes); the unified `/agents/chat` path introduced in v1.2.40 was dead code on the server and was falling through to `POST /agents` (agent creation), producing a misleading "max agents" 403
+- Remove the redundant `id` body field since the server reads agentId from the URL path
+
+---
 ## [1.2.41] - 2026-05-06
 ### Fixed
 - Fix Chatsy auto-support 401 "Authentication required" by passing `backendManagerKey` from `process.env.BACKEND_MANAGER_KEY` in the request body (consuming bot project must have `BACKEND_MANAGER_KEY` set in its `.env` matching Chatsy's deployed value)

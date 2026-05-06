@@ -158,12 +158,11 @@ module.exports = function (instance, member, message, messages) {
     // Send message to Chatsy
     assistant.log(`[chatsy] Request: agentId=${config.settings.chatsy.agentId}, conversationId=${conversationId || 'new'}, messageLength=${finalMessageContent.length}, member=${member.id}`);
 
-    fetch(`https://api.chatsy.ai/agents/chat`, {
+    fetch(`https://api.chatsy.ai/agents/${config.settings.chatsy.agentId}/chat`, {
       method: 'post',
       response: 'json',
       body: {
         backendManagerKey: process.env.BACKEND_MANAGER_KEY,
-        id: config.settings.chatsy.agentId,
         mode: 'live',
         message: finalMessageContent,
         conversationId: conversationId,
